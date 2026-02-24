@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import PageLayout from '../../layouts/PageLayout.astro';
 import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
 import ProductCard from '../../components/product/ProductCard.astro';
-import Card from '../../components/ui/Card.astro';
+import CategoryCard from '../../components/product/CategoryCard.astro';
 import { buildCategoryTree } from '../../lib/utils/categories';
 
 const allCategories = await getCollection('categories');
@@ -66,33 +66,14 @@ const jsonLd = {
       <h2 class="text-2xl font-bold text-navy-900 mb-8">Product Categories</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {categoryTree.map((cat) => (
-          <Card href={`/products/${cat.slug}`} variant="bordered" padding="lg">
-            <h3 class="text-lg font-semibold text-navy-900 group-hover:text-primary-600 transition-colors">
-              {cat.name}
-            </h3>
-            <p class="mt-2 text-sm text-gray-600 line-clamp-3">
-              {cat.description}
-            </p>
-            {cat.children.length > 0 && (
-              <ul class="mt-4 space-y-1">
-                {cat.children.map((sub) => (
-                  <li>
-                    <a
-                      href={`/products/${sub.slug}`}
-                      class="text-sm text-primary-600 hover:text-primary-700 hover:underline transition-colors"
-                    >
-                      {sub.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
-            <div class="mt-4 pt-4 border-t border-gray-100">
-              <span class="text-sm font-medium text-primary-600 group-hover:text-primary-700">
-                Browse {cat.name} &rarr;
-              </span>
-            </div>
-          </Card>
+          <CategoryCard
+            href={`/products/${cat.slug}`}
+            name={cat.name}
+            description={cat.description}
+            slug={cat.slug}
+            variant="full"
+            children={cat.children.map((sub) => ({ name: sub.name, slug: sub.slug }))}
+          />
         ))}
       </div>
     </div>

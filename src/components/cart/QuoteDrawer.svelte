@@ -122,7 +122,7 @@
 <!-- Trigger button -->
 <button
   onclick={openDrawer}
-  class="relative inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
+  class="relative inline-flex items-center gap-2 whitespace-nowrap rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
   aria-label="Open quote list{itemCount > 0 ? `, ${itemCount} item${itemCount !== 1 ? 's' : ''}` : ''}"
 >
   <svg
@@ -131,7 +131,7 @@
     viewBox="0 0 24 24"
     stroke-width="1.5"
     stroke="currentColor"
-    class="h-5 w-5"
+    class="h-6 w-6"
     aria-hidden="true"
   >
     <path

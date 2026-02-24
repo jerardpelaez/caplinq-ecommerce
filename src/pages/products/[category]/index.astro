@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import PageLayout from '../../../layouts/PageLayout.astro';
 import Breadcrumbs from '../../../components/layout/Breadcrumbs.astro';
 import ProductCard from '../../../components/product/ProductCard.astro';
-import Card from '../../../components/ui/Card.astro';
+import CategoryCard from '../../../components/product/CategoryCard.astro';
 import { getCategoryBreadcrumbs } from '../../../lib/utils/categories';
 
 export async function getStaticPaths() {
@@ -118,17 +118,14 @@ const jsonLd = {
         <h2 class="text-xl font-bold text-navy-900 mb-6">Browse by Subcategory</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {subcategories.map((sub) => (
-            <Card href={`/products/${sub.slug}`} variant="bordered" padding="md">
-              <h3 class="text-lg font-semibold text-navy-900 group-hover:text-primary-600 transition-colors">
-                {sub.name}
-              </h3>
-              <p class="mt-2 text-sm text-gray-600 line-clamp-3">{sub.description}</p>
-              <div class="mt-4 pt-3 border-t border-gray-100">
-                <span class="text-sm font-medium text-primary-600 group-hover:text-primary-700">
-                  View Products &rarr;
-                </span>
-              </div>
-            </Card>
+            <CategoryCard
+              href={`/products/${sub.slug}`}
+              name={sub.name}
+              description={sub.description}
+              slug={sub.slug}
+              parentSlug={category.slug}
+              variant="compact"
+            />
           ))}
         </div>
       </div>

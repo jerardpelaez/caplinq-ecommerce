@@ -1,0 +1,112 @@
+---
+import Card from '../ui/Card.astro';
+import { getCategoryIcon } from '../../lib/utils/category-icons';
+
+interface Child {
+  name: string;
+  slug: string;
+}
+
+interface Props {
+  href: string;
+  name: string;
+  description?: string;
+  slug: string;
+  parentSlug?: string;
+  children?: Child[];
+  variant?: 'full' | 'compact';
+}
+
+const {
+  href,
+  name,
+  description,
+  slug,
+  parentSlug,
+  children = [],
+  variant = 'full',
+} = Astro.props;
+
+const iconPaths = getCategoryIcon(slug, parentSlug);
+const isFull = variant === 'full';
+const hasChildren = isFull && children.length > 0;
+const iconSize = isFull ? 'w-10 h-10' : 'w-8 h-8';
+const iconBoxSize = isFull ? 'w-14 h-14' : 'w-11 h-11';
+const padding = isFull ? 'lg' : 'md';
+---
+
+{/* compact variant: no nested <a> links, so Card can be a link */}
+{!hasChildren ? (
+  <Card href={href} variant="bordered" padding={padding}>
+    <div class="flex gap-4">
+      <div class:list={['flex-shrink-0 flex items-center justify-center rounded-lg bg-primary-100 text-primary-600', iconBoxSize]}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class={iconSize}
+          set:html={iconPaths}
+        />
+      </div>
+      <div class="min-w-0 flex-1">
+        <h3 class="text-lg font-semibold text-navy-900 group-hover:text-primary-600 transition-colors">
+          {name}
+        </h3>
+        {description && (
+          <p class="mt-1 text-sm text-gray-600 line-clamp-3">{description}</p>
+        )}
+      </div>
+    </div>
+    <div class:list={['border-t border-gray-100', isFull ? 'mt-4 pt-4' : 'mt-3 pt-3']}>
+      <span class="text-sm font-medium text-primary-600 group-hover:text-primary-700">
+        {isFull ? `Browse ${name}` : 'View Products'} &rarr;
+      </span>
+    </div>
+  </Card>
+) : (
+  /* full variant with children: use <div> card to avoid nested <a> tags */
+  <Card variant="bordered" padding={padding} class="hover:shadow-lg hover:border-primary-300 transition-all duration-200">
+    <div class="flex gap-4">
+      <div class:list={['flex-shrink-0 flex items-center justify-center rounded-lg bg-primary-100 text-primary-600', iconBoxSize]}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class={iconSize}
+          set:html={iconPaths}
+        />
+      </div>
+      <div class="min-w-0 flex-1">
+        <h3 class="text-lg font-semibold text-navy-900">
+          <a href={href} class="hover:text-primary-600 transition-colors">
+            {name}
+          </a>
+        </h3>
+        {description && (
+          <p class="mt-1 text-sm text-gray-600 line-clamp-3">{description}</p>
+        )}
+      </div>
+    </div>
+    <ul class="mt-4 space-y-1">
+      {children.map((sub) => (
+        <li>
+          <a
+            href={`/products/${sub.slug}`}
+            class="text-sm text-primary-600 hover:text-primary-700 hover:underline transition-colors"
+          >
+            {sub.name}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="mt-4 pt-4 border-t border-gray-100">
+      <a href={href} class="text-sm font-medium text-primary-600 hover:text-primary-700">
+        Browse {name} &rarr;
+      </a>
+    </div>
+  </Card>
+)}
