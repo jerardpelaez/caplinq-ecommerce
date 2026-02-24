@@ -10,12 +10,18 @@ interface Props {
   shortDescription: string;
   specifications: Record<string, string>;
   featured?: boolean;
+  featuredImage?: string;
 }
 
-const { name, slug, sku, category, categoryName, shortDescription, specifications, featured } = Astro.props;
+const { name, slug, sku, category, categoryName, shortDescription, specifications, featured, featuredImage } = Astro.props;
 ---
 
 <article class="group bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg hover:border-primary-300 transition-all duration-200">
+  {featuredImage && (
+    <a href={`/products/${category}/${slug}`} class="block aspect-video overflow-hidden bg-gray-50">
+      <img src={featuredImage} alt={name} class="h-full w-full object-contain p-4 group-hover:scale-105 transition-transform duration-200" loading="lazy" />
+    </a>
+  )}
   <div class="p-6">
     <div class="flex items-center gap-2">
       {categoryName && (

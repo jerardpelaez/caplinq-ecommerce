@@ -94,7 +94,7 @@ const productJsonLd = {
     name: data.brand,
   },
   category: categoryNameMap[data.category] || data.category,
-  image: data.images.length > 0 ? `https://www.caplinq.com${data.images[0]}` : undefined,
+  image: data.images.length > 0 ? data.images[0] : undefined,
   offers: {
     '@type': 'Offer',
     availability: data.status === 'active'
@@ -323,6 +323,7 @@ const productJsonLd = {
               shortDescription={related.data.shortDescription}
               specifications={related.data.specifications}
               featured={related.data.featured}
+              featuredImage={related.data.featuredImage}
             />
           ))}
         </div>
