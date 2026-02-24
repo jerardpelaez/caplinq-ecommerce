@@ -24,3 +24,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Generated content (created by npm run sync)
+src/content/products/
+src/content/categories/
