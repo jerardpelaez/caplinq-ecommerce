@@ -44,10 +44,15 @@ const pageJsonLd = jsonLd ? JSON.stringify(jsonLd) : null;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
 
+    <!-- Performance: theme color and color scheme for faster first paint -->
+    <meta name="theme-color" content="#0066cc" />
+    <meta name="color-scheme" content="light" />
+
     <!-- SEO -->
     <title>{siteTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <meta name="robots" content="index, follow" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />

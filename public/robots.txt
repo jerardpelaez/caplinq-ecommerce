@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://www.caplinq.com/sitemap-index.xml
+
+# Disallow non-content pages
+Disallow: /search
+Disallow: /api/

@@ -1,0 +1,121 @@
+---
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import ProductCard from '../../components/product/ProductCard.astro';
+import BlogCard from '../../components/content/BlogCard.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+// Build JSON-LD Article structured data
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: post.data.title,
+  author: {
+    '@type': 'Person',
+    name: post.data.author,
+  },
+  datePublished: post.data.publishDate.toISOString(),
+  ...(post.data.updatedDate && { dateModified: post.data.updatedDate.toISOString() }),
+  ...(post.data.featuredImage && {
+    image: post.data.featuredImage.startsWith('http')
+      ? post.data.featuredImage
+      : `https://www.caplinq.com${post.data.featuredImage}`,
+  }),
+  publisher: {
+    '@type': 'Organization',
+    name: 'CAPLINQ',
+    url: 'https://www.caplinq.com',
+  },
+  description: post.data.seoDescription || post.data.excerpt,
+};
+
+// Fetch related products if any
+let relatedProductEntries: any[] = [];
+if (post.data.relatedProducts.length > 0) {
+  const allProducts = await getCollection('products', ({ data }) => data.status === 'active');
+  const allCategories = await getCollection('categories');
+  relatedProductEntries = post.data.relatedProducts
+    .map((slug) => {
+      const product = allProducts.find((p) => p.data.slug === slug);
+      if (!product) return null;
+      const categoryData = allCategories.find((c) => c.data.slug === product.data.category);
+      return {
+        product,
+        categoryName: categoryData?.data.name,
+      };
+    })
+    .filter(Boolean);
+}
+
+// Fetch other blog posts for "More Articles" section
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const morePosts = allPosts
+  .filter((p) => p.data.slug !== post.data.slug)
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
+  .slice(0, 3);
+---
+
+<BlogLayout
+  title={post.data.title}
+  description={post.data.seoDescription || post.data.excerpt}
+  author={post.data.author}
+  publishDate={post.data.publishDate}
+  updatedDate={post.data.updatedDate}
+  category={post.data.category}
+  tags={post.data.tags}
+  featuredImage={post.data.featuredImage}
+  jsonLd={jsonLd}
+>
+  <Content />
+
+  <!-- Related Products -->
+  {relatedProductEntries.length > 0 && (
+    <section class="mt-12 pt-8 border-t border-gray-200">
+      <h2 class="text-2xl font-bold text-navy-900 mb-6">Related Products</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {relatedProductEntries.map((entry: any) => (
+          <ProductCard
+            name={entry.product.data.name}
+            slug={entry.product.data.slug}
+            sku={entry.product.data.sku}
+            category={entry.product.data.category}
+            categoryName={entry.categoryName}
+            shortDescription={entry.product.data.shortDescription}
+            specifications={entry.product.data.specifications}
+            featured={entry.product.data.featured}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- More Articles -->
+  {morePosts.length > 0 && (
+    <section class="mt-12 pt-8 border-t border-gray-200">
+      <h2 class="text-2xl font-bold text-navy-900 mb-6">More Articles</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {morePosts.map((p) => (
+          <BlogCard
+            title={p.data.title}
+            slug={p.data.slug}
+            author={p.data.author}
+            publishDate={p.data.publishDate}
+            category={p.data.category}
+            excerpt={p.data.excerpt}
+            featuredImage={p.data.featuredImage}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+</BlogLayout>

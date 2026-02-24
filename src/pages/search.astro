@@ -1,0 +1,177 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
+import ProductCard from '../components/product/ProductCard.astro';
+import { getCollection } from 'astro:content';
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Search' },
+];
+
+const query = Astro.url.searchParams.get('q')?.trim() || '';
+
+const allProducts = await getCollection('products', ({ data }) => data.status === 'active');
+const categories = await getCollection('categories');
+
+let matchingProducts = allProducts;
+
+if (query) {
+  const lowerQuery = query.toLowerCase();
+  matchingProducts = allProducts.filter((product) => {
+    const { name, shortDescription, sku, category, applications, industries } = product.data;
+    return (
+      name.toLowerCase().includes(lowerQuery) ||
+      shortDescription.toLowerCase().includes(lowerQuery) ||
+      sku.toLowerCase().includes(lowerQuery) ||
+      category.toLowerCase().includes(lowerQuery) ||
+      applications.some((a: string) => a.toLowerCase().includes(lowerQuery)) ||
+      industries.some((i: string) => i.toLowerCase().includes(lowerQuery))
+    );
+  });
+}
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SearchResultsPage',
+  name: query ? `Search Results for "${query}"` : 'Search Products',
+  url: `https://www.caplinq.com/search/${query ? `?q=${encodeURIComponent(query)}` : ''}`,
+  isPartOf: {
+    '@type': 'WebSite',
+    name: 'CAPLINQ',
+    url: 'https://www.caplinq.com',
+  },
+};
+---
+
+<PageLayout
+  title={query ? `Search Results for "${query}"` : 'Search Products'}
+  description={query ? `Search results for "${query}" in CAPLINQ specialty chemicals and electronic materials catalog.` : 'Search CAPLINQ products, technical resources, and articles for specialty chemicals and electronic materials.'}
+  jsonLd={jsonLd}
+>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <!-- Search Header -->
+  <section class="bg-gray-50 border-b border-gray-200">
+    <div class="container-site py-8 lg:py-12">
+      <h1 class="text-3xl lg:text-4xl font-bold text-navy-900 mb-4">Search</h1>
+      <p class="text-gray-600 mb-6">
+        Search our catalog of specialty chemicals, electronic materials, and technical resources.
+      </p>
+
+      <!-- Search Input -->
+      <form action="/search" method="GET" class="max-w-2xl">
+        <div class="relative">
+          <input
+            type="text"
+            name="q"
+            value={query}
+            placeholder="Search products by name, SKU, category, or application..."
+            class="w-full rounded-lg border border-gray-300 px-4 py-3 pl-12 text-sm text-gray-900 placeholder-gray-400 transition-colors focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none"
+          />
+          <svg
+            class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <button
+            type="submit"
+            class="absolute right-2 top-1/2 -translate-y-1/2 btn-primary text-sm px-4 py-1.5"
+          >
+            Search
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Search Results -->
+  <section class="py-12 lg:py-16">
+    <div class="container-site">
+      <div id="search-results">
+        {query ? (
+          <>
+            <div class="mb-8">
+              <h2 class="text-xl font-semibold text-navy-900">
+                {matchingProducts.length === 0
+                  ? `No results found for "${query}"`
+                  : `${matchingProducts.length} result${matchingProducts.length !== 1 ? 's' : ''} for "${query}"`
+                }
+              </h2>
+              {matchingProducts.length === 0 && (
+                <p class="text-gray-600 mt-2">
+                  Try adjusting your search terms or browse our product categories below.
+                </p>
+              )}
+            </div>
+
+            {matchingProducts.length > 0 ? (
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {matchingProducts.map((product) => {
+                  const categoryData = categories.find((c) => c.data.slug === product.data.category);
+                  return (
+                    <ProductCard
+                      name={product.data.name}
+                      slug={product.data.slug}
+                      sku={product.data.sku}
+                      category={product.data.category}
+                      categoryName={categoryData?.data.name}
+                      shortDescription={product.data.shortDescription}
+                      specifications={product.data.specifications}
+                      featured={product.data.featured}
+                    />
+                  );
+                })}
+              </div>
+            ) : (
+              <div class="bg-gray-50 rounded-lg border border-gray-200 p-8 text-center">
+                <svg class="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <h3 class="text-lg font-semibold text-navy-900 mb-2">No Products Found</h3>
+                <p class="text-gray-600 mb-6 max-w-md mx-auto">
+                  We could not find any products matching your search. Try a different search term
+                  or browse our product categories.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                  <a href="/products" class="btn-primary">Browse All Products</a>
+                  <a href="/contact" class="btn-secondary">Contact Us for Help</a>
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <div class="text-center">
+            <svg class="w-16 h-16 text-gray-200 mx-auto mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <h2 class="text-2xl font-bold text-navy-900 mb-3">Search Our Products</h2>
+            <p class="text-gray-600 max-w-lg mx-auto mb-8">
+              Enter a product name, SKU, category, or application keyword above to search our
+              catalog of specialty chemicals and electronic materials.
+            </p>
+
+            <!-- Quick Links -->
+            <div class="max-w-2xl mx-auto">
+              <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Popular Searches</h3>
+              <div class="flex flex-wrap justify-center gap-2">
+                {['Thermal Grease', 'Epoxy Adhesive', 'Die Attach', 'Conformal Coating', 'PEEK', 'Underfill', 'Phase Change'].map((term) => (
+                  <a
+                    href={`/search?q=${encodeURIComponent(term)}`}
+                    class="inline-flex items-center px-3 py-1.5 rounded-full bg-gray-100 text-sm text-gray-700 hover:bg-primary-100 hover:text-primary-700 transition-colors"
+                  >
+                    {term}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+</PageLayout>

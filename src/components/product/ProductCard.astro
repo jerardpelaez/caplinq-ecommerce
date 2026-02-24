@@ -1,0 +1,54 @@
+---
+import Badge from '../ui/Badge.astro';
+
+interface Props {
+  name: string;
+  slug: string;
+  sku: string;
+  category: string;
+  categoryName?: string;
+  shortDescription: string;
+  specifications: Record<string, string>;
+  featured?: boolean;
+}
+
+const { name, slug, sku, category, categoryName, shortDescription, specifications, featured } = Astro.props;
+---
+
+<article class="group bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg hover:border-primary-300 transition-all duration-200">
+  <div class="p-6">
+    <div class="flex items-center gap-2">
+      {categoryName && (
+        <span class="text-xs font-medium text-primary-600 uppercase tracking-wider">
+          {categoryName}
+        </span>
+      )}
+      {featured && <Badge variant="primary" size="sm">Featured</Badge>}
+    </div>
+
+    <h3 class="text-lg font-semibold text-navy-900 mt-2 group-hover:text-primary-600 transition-colors">
+      <a href={`/products/${category}/${slug}`}>{name}</a>
+    </h3>
+
+    <p class="text-sm text-gray-600 mt-2 line-clamp-2">{shortDescription}</p>
+
+    <div class="mt-4 space-y-1">
+      {Object.entries(specifications).slice(0, 3).map(([key, value]) => (
+        <div class="flex justify-between text-xs">
+          <span class="text-gray-500">{key}</span>
+          <span class="font-medium text-gray-700">{value}</span>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
+      <a
+        href={`/products/${category}/${slug}`}
+        class="text-sm font-medium text-primary-600 hover:text-primary-700"
+      >
+        View Details
+      </a>
+      <span class="text-xs text-gray-400">SKU: {sku}</span>
+    </div>
+  </div>
+</article>

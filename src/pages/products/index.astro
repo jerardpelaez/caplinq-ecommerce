@@ -1,0 +1,126 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '../../layouts/PageLayout.astro';
+import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
+import ProductCard from '../../components/product/ProductCard.astro';
+import Card from '../../components/ui/Card.astro';
+import { buildCategoryTree } from '../../lib/utils/categories';
+
+const allCategories = await getCollection('categories');
+const allProducts = await getCollection('products');
+
+const categoryTree = buildCategoryTree(allCategories);
+
+const featuredProducts = allProducts.filter((p) => p.data.featured);
+
+// Build a lookup map for category names
+const categoryNameMap = new Map(allCategories.map((c) => [c.data.slug, c.data.name]));
+
+const pageTitle = 'Products';
+const pageDescription =
+  'Browse CAPLINQ specialty chemicals, thermal interface materials, adhesives, and engineering plastics for electronics manufacturing.';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'CAPLINQ Products',
+  description: pageDescription,
+  url: 'https://www.caplinq.com/products/',
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: categoryTree.map((cat, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: cat.name,
+      url: `https://www.caplinq.com/products/${cat.slug}/`,
+    })),
+  },
+};
+---
+
+<PageLayout title={pageTitle} description={pageDescription} jsonLd={jsonLd}>
+  <Breadcrumbs
+    items={[
+      { label: 'Home', href: '/' },
+      { label: 'Products' },
+    ]}
+  />
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-b from-gray-50 to-white py-12 lg:py-16">
+    <div class="container-site">
+      <div class="max-w-3xl">
+        <h1 class="text-3xl lg:text-4xl font-bold text-navy-900">
+          Specialty Chemicals & Electronic Materials
+        </h1>
+        <p class="mt-4 text-lg text-gray-600 leading-relaxed">
+          Explore our comprehensive portfolio of high-performance materials engineered for electronics manufacturing, semiconductor packaging, and industrial applications. From thermal interface materials to specialty plastics, CAPLINQ delivers the materials that keep your products performing at their best.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Categories -->
+  <section class="py-12 lg:py-16">
+    <div class="container-site">
+      <h2 class="text-2xl font-bold text-navy-900 mb-8">Product Categories</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {categoryTree.map((cat) => (
+          <Card href={`/products/${cat.slug}`} variant="bordered" padding="lg">
+            <h3 class="text-lg font-semibold text-navy-900 group-hover:text-primary-600 transition-colors">
+              {cat.name}
+            </h3>
+            <p class="mt-2 text-sm text-gray-600 line-clamp-3">
+              {cat.description}
+            </p>
+            {cat.children.length > 0 && (
+              <ul class="mt-4 space-y-1">
+                {cat.children.map((sub) => (
+                  <li>
+                    <a
+                      href={`/products/${sub.slug}`}
+                      class="text-sm text-primary-600 hover:text-primary-700 hover:underline transition-colors"
+                    >
+                      {sub.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <div class="mt-4 pt-4 border-t border-gray-100">
+              <span class="text-sm font-medium text-primary-600 group-hover:text-primary-700">
+                Browse {cat.name} &rarr;
+              </span>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  {featuredProducts.length > 0 && (
+    <section class="bg-gray-50 py-12 lg:py-16">
+      <div class="container-site">
+        <h2 class="text-2xl font-bold text-navy-900 mb-2">Featured Products</h2>
+        <p class="text-gray-600 mb-8">
+          Our most popular materials trusted by engineers worldwide.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {featuredProducts.map((product) => (
+            <ProductCard
+              name={product.data.name}
+              slug={product.data.slug}
+              sku={product.data.sku}
+              category={product.data.category}
+              categoryName={categoryNameMap.get(product.data.category)}
+              shortDescription={product.data.shortDescription}
+              specifications={product.data.specifications}
+              featured={product.data.featured}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</PageLayout>

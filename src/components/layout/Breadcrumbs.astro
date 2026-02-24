@@ -1,0 +1,47 @@
+---
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+  class?: string;
+}
+
+const { items, class: className = '' } = Astro.props;
+
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: item.label,
+    ...(item.href ? { item: `https://www.caplinq.com${item.href}` } : {}),
+  })),
+});
+---
+
+<nav class={`bg-gray-50 border-b border-gray-200 ${className}`} aria-label="Breadcrumb">
+  <div class="container-site py-3">
+    <ol class="flex items-center gap-2 text-sm text-gray-500">
+      {items.map((crumb, i) => (
+        <li class="flex items-center gap-2">
+          {i > 0 && (
+            <svg class="h-4 w-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          )}
+          {crumb.href ? (
+            <a href={crumb.href} class="hover:text-primary-600 transition-colors whitespace-nowrap">{crumb.label}</a>
+          ) : (
+            <span class="text-gray-900 font-medium truncate">{crumb.label}</span>
+          )}
+        </li>
+      ))}
+    </ol>
+  </div>
+</nav>
+
+<script type="application/ld+json" is:inline set:html={jsonLd} />

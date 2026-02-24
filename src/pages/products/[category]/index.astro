@@ -1,0 +1,185 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '../../../layouts/PageLayout.astro';
+import Breadcrumbs from '../../../components/layout/Breadcrumbs.astro';
+import ProductCard from '../../../components/product/ProductCard.astro';
+import Card from '../../../components/ui/Card.astro';
+import { getCategoryBreadcrumbs } from '../../../lib/utils/categories';
+
+export async function getStaticPaths() {
+  const allCategories = await getCollection('categories');
+  const allProducts = await getCollection('products');
+
+  // Build a lookup map for category names
+  const categoryNameMap = new Map(allCategories.map((c) => [c.data.slug, c.data.name]));
+
+  return allCategories.map((category) => {
+    // Find products in this category
+    const categoryProducts = allProducts.filter(
+      (p) => p.data.category === category.data.slug,
+    );
+
+    // Find subcategories of this category
+    const subcategories = allCategories
+      .filter((c) => c.data.parentCategory === category.data.slug)
+      .sort((a, b) => a.data.displayOrder - b.data.displayOrder);
+
+    // Find parent category info if this is a subcategory
+    const parentCategory = category.data.parentCategory
+      ? allCategories.find((c) => c.data.slug === category.data.parentCategory)
+      : undefined;
+
+    // Build breadcrumbs using the utility
+    const categoryBreadcrumbs = getCategoryBreadcrumbs(category.data.slug, allCategories);
+
+    return {
+      params: { category: category.data.slug },
+      props: {
+        category: category.data,
+        products: categoryProducts,
+        subcategories: subcategories.map((c) => c.data),
+        parentCategory: parentCategory?.data,
+        breadcrumbs: categoryBreadcrumbs,
+        categoryNameMap: Object.fromEntries(categoryNameMap),
+      },
+    };
+  });
+}
+
+const { category, products, subcategories, parentCategory, breadcrumbs, categoryNameMap } =
+  Astro.props;
+
+const pageTitle = category.seoTitle || `${category.name} — CAPLINQ Products`;
+const pageDescription = category.seoDescription || category.description;
+
+// Build full breadcrumb items
+const breadcrumbItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Products', href: '/products' },
+  ...breadcrumbs.map((b: { label: string; href: string }, i: number) =>
+    i === breadcrumbs.length - 1 ? { label: b.label } : b,
+  ),
+];
+
+// CollectionPage JSON-LD for category
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: category.name,
+  description: category.description,
+  url: `https://www.caplinq.com/products/${category.slug}/`,
+  isPartOf: {
+    '@type': 'WebSite',
+    name: 'CAPLINQ',
+    url: 'https://www.caplinq.com',
+  },
+  ...(products.length > 0 && {
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: products.map((p: any, index: number) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: p.data.name,
+        url: `https://www.caplinq.com/products/${p.data.category}/${p.data.slug}/`,
+      })),
+    },
+  }),
+};
+---
+
+<PageLayout title={pageTitle} description={pageDescription} jsonLd={jsonLd}>
+  <Breadcrumbs items={breadcrumbItems} />
+
+  <!-- Category Header -->
+  <section class="bg-gradient-to-b from-gray-50 to-white py-12 lg:py-16">
+    <div class="container-site">
+      <div class="max-w-3xl">
+        {parentCategory && (
+          <a
+            href={`/products/${parentCategory.slug}`}
+            class="inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 mb-3 transition-colors"
+          >
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            {parentCategory.name}
+          </a>
+        )}
+        <h1 class="text-3xl lg:text-4xl font-bold text-navy-900">{category.name}</h1>
+        <p class="mt-4 text-lg text-gray-600 leading-relaxed">{category.description}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Subcategories (for parent categories) -->
+  {subcategories.length > 0 && (
+    <section class="py-8 lg:py-12">
+      <div class="container-site">
+        <h2 class="text-xl font-bold text-navy-900 mb-6">Browse by Subcategory</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {subcategories.map((sub) => (
+            <Card href={`/products/${sub.slug}`} variant="bordered" padding="md">
+              <h3 class="text-lg font-semibold text-navy-900 group-hover:text-primary-600 transition-colors">
+                {sub.name}
+              </h3>
+              <p class="mt-2 text-sm text-gray-600 line-clamp-3">{sub.description}</p>
+              <div class="mt-4 pt-3 border-t border-gray-100">
+                <span class="text-sm font-medium text-primary-600 group-hover:text-primary-700">
+                  View Products &rarr;
+                </span>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Products Grid -->
+  {products.length > 0 && (
+    <section class={`py-8 lg:py-12 ${subcategories.length > 0 ? 'bg-gray-50' : ''}`}>
+      <div class="container-site">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-xl font-bold text-navy-900">
+            {subcategories.length > 0 ? 'All Products in This Category' : 'Products'}
+          </h2>
+          <span class="text-sm text-gray-500">
+            {products.length} {products.length === 1 ? 'product' : 'products'}
+          </span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {products.map((product: any) => (
+            <ProductCard
+              name={product.data.name}
+              slug={product.data.slug}
+              sku={product.data.sku}
+              category={product.data.category}
+              categoryName={categoryNameMap[product.data.category]}
+              shortDescription={product.data.shortDescription}
+              specifications={product.data.specifications}
+              featured={product.data.featured}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Empty state for categories with no direct products and no subcategories -->
+  {products.length === 0 && subcategories.length === 0 && (
+    <section class="py-16">
+      <div class="container-site text-center">
+        <p class="text-gray-500 text-lg">No products found in this category yet.</p>
+        <a
+          href="/products"
+          class="inline-flex items-center gap-2 mt-4 text-primary-600 hover:text-primary-700 font-medium transition-colors"
+        >
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+          Browse all products
+        </a>
+      </div>
+    </section>
+  )}
+</PageLayout>

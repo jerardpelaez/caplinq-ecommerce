@@ -1,0 +1,258 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
+import { INDUSTRIES, SITE } from '../lib/constants/site';
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'About' },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  name: 'About CAPLINQ',
+  url: `${SITE.url}/about/`,
+  description: 'Learn about CAPLINQ Corporation, a global supplier of specialty chemicals, thermal interface materials, adhesives, and electronic materials.',
+  mainEntity: {
+    '@type': 'Organization',
+    name: 'CAPLINQ Corporation',
+    url: SITE.url,
+    description: SITE.description,
+    email: SITE.email,
+    sameAs: [],
+    contactPoint: {
+      '@type': 'ContactPoint',
+      email: SITE.email,
+      contactType: 'sales',
+      availableLanguage: ['English'],
+    },
+    areaServed: ['North America', 'Europe', 'Asia'],
+    knowsAbout: [
+      'Thermal Interface Materials',
+      'Specialty Chemicals',
+      'Electronic Materials',
+      'Semiconductor Packaging Materials',
+      'Adhesives and Sealants',
+    ],
+  },
+};
+
+const stats = [
+  { value: '15+', label: 'Years in Business' },
+  { value: '500+', label: 'Products Available' },
+  { value: '50+', label: 'Countries Served' },
+  { value: '1000+', label: 'Global Customers' },
+];
+
+const valueProps = [
+  {
+    title: 'Quality Assurance',
+    description: 'Every product in our portfolio undergoes rigorous quality control testing. We provide comprehensive Technical Data Sheets (TDS) and Safety Data Sheets (SDS) so you can verify material performance against your specifications before purchase.',
+    icon: 'shield',
+  },
+  {
+    title: 'Technical Expertise',
+    description: 'Our team of materials scientists and application engineers brings decades of combined experience in specialty chemicals and electronic materials. We help you select the optimal material for your specific application requirements.',
+    icon: 'bolt',
+  },
+  {
+    title: 'Global Supply Chain',
+    description: 'With warehousing and distribution capabilities in North America and Europe, we deliver reliable supply chain solutions. Our global logistics network ensures timely delivery to manufacturing facilities worldwide.',
+    icon: 'globe',
+  },
+  {
+    title: 'Custom Solutions',
+    description: 'When off-the-shelf products do not meet your requirements, our technical team works with you to develop custom formulations and packaging configurations tailored to your manufacturing process.',
+    icon: 'cog',
+  },
+];
+---
+
+<PageLayout
+  title="About Us - Specialty Chemicals & Materials Supplier"
+  description="Learn about CAPLINQ Corporation, a global supplier of specialty chemicals, thermal interface materials, adhesives, and electronic materials for the semiconductor and electronics industries."
+  jsonLd={jsonLd}
+>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-navy-900 to-primary-800 text-white">
+    <div class="container-site py-16 lg:py-24">
+      <div class="max-w-3xl">
+        <h1 class="text-4xl lg:text-5xl font-bold leading-tight mb-6">
+          About CAPLINQ
+        </h1>
+        <p class="text-lg lg:text-xl text-primary-100 leading-relaxed">
+          CAPLINQ Corporation is a specialty chemicals and electronic materials supplier
+          dedicated to providing high-performance materials for the world's most demanding
+          manufacturing applications.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Company Story / Mission -->
+  <section class="py-12 lg:py-16">
+    <div class="container-site">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl font-bold text-navy-900 mb-6">Our Mission</h2>
+          <p class="text-gray-600 leading-relaxed mb-4">
+            At CAPLINQ, our mission is to bridge the gap between advanced material science and
+            practical manufacturing needs. We source, develop, and distribute specialty chemicals
+            and electronic materials that enable our customers to build better, more reliable products.
+          </p>
+          <p class="text-gray-600 leading-relaxed mb-4">
+            Founded with the vision of making high-performance materials more accessible to engineers
+            and procurement professionals worldwide, CAPLINQ has grown into a trusted partner for
+            companies across the electronics, semiconductor, automotive, aerospace, and industrial
+            manufacturing sectors.
+          </p>
+          <p class="text-gray-600 leading-relaxed">
+            We combine deep technical knowledge with responsive customer service to help you find the
+            right material solution, whether you need a single thermal pad for prototyping or a
+            multi-year supply agreement for high-volume production.
+          </p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-8 lg:p-10">
+          <h3 class="text-xl font-semibold text-navy-900 mb-4">What We Do</h3>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-primary-600 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-gray-600">Supply thermal interface materials, adhesives, encapsulants, and conformal coatings</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-primary-600 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-gray-600">Provide die attach materials and semiconductor packaging solutions</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-primary-600 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-gray-600">Distribute specialty plastics including PEEK, PPS, and polyimide films</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-primary-600 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-gray-600">Offer application engineering support and material selection guidance</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-primary-600 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-gray-600">Deliver custom formulation and packaging services for specialized requirements</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Statistics -->
+  <section class="py-12 lg:py-16 bg-gray-50">
+    <div class="container-site">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-navy-900 mb-4">CAPLINQ by the Numbers</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+          Our track record demonstrates our commitment to serving the global electronics and
+          specialty chemicals markets.
+        </p>
+      </div>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+        {stats.map((stat) => (
+          <div class="bg-white rounded-lg border border-gray-200 p-6 text-center">
+            <div class="text-3xl lg:text-4xl font-bold text-primary-600 mb-2">{stat.value}</div>
+            <div class="text-sm text-gray-600 font-medium">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Industries Served -->
+  <section class="py-12 lg:py-16">
+    <div class="container-site">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-navy-900 mb-4">Industries We Serve</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+          CAPLINQ provides specialty chemicals and electronic materials to a broad range of
+          industries, each with unique material performance and compliance requirements.
+        </p>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        {INDUSTRIES.map((industry) => (
+          <div class="bg-gray-50 rounded-lg border border-gray-200 p-4 text-center hover:border-primary-300 hover:bg-primary-50 transition-all duration-200">
+            <span class="text-sm font-medium text-navy-900">{industry}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose CAPLINQ -->
+  <section class="py-12 lg:py-16 bg-gray-50">
+    <div class="container-site">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-navy-900 mb-4">Why Choose CAPLINQ</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+          We differentiate ourselves through technical depth, quality commitment, and a
+          customer-first approach to material supply.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {valueProps.map((prop) => (
+          <div class="bg-white rounded-lg border border-gray-200 p-6 lg:p-8">
+            <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
+              {prop.icon === 'shield' && (
+                <svg class="w-6 h-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              )}
+              {prop.icon === 'bolt' && (
+                <svg class="w-6 h-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              )}
+              {prop.icon === 'globe' && (
+                <svg class="w-6 h-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              )}
+              {prop.icon === 'cog' && (
+                <svg class="w-6 h-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              )}
+            </div>
+            <h3 class="text-xl font-semibold text-navy-900 mb-3">{prop.title}</h3>
+            <p class="text-gray-600 leading-relaxed">{prop.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 bg-primary-700">
+    <div class="container-site text-center">
+      <h2 class="text-3xl font-bold text-white mb-4">Ready to Work With Us?</h2>
+      <p class="text-primary-100 max-w-2xl mx-auto mb-8">
+        Whether you need material recommendations, pricing information, or technical support,
+        our team is ready to help you find the right solution.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="/contact" class="btn-accent text-base px-6 py-3">Contact Us</a>
+        <a href="/quote-request" class="bg-white/10 text-white border border-white/30 hover:bg-white/20 inline-flex items-center justify-center px-6 py-3 rounded-md font-semibold text-base transition-all">
+          Request a Quote
+        </a>
+      </div>
+    </div>
+  </section>
+</PageLayout>

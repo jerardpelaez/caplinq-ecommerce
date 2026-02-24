@@ -1,0 +1,183 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
+import Input from '../components/ui/Input.astro';
+import QuoteRequestForm from '../components/forms/QuoteRequestForm.svelte';
+import { SITE } from '../lib/constants/site';
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Request a Quote' },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Request a Quote - CAPLINQ',
+  description: 'Request a quote for CAPLINQ specialty chemicals, thermal interface materials, adhesives, and electronic materials. Fast response from our sales team.',
+  url: `${SITE.url}/quote-request`,
+  isPartOf: {
+    '@type': 'WebSite',
+    name: SITE.name,
+    url: SITE.url,
+  },
+  potentialAction: {
+    '@type': 'QuoteAction',
+    target: `${SITE.url}/quote-request`,
+  },
+};
+
+const steps = [
+  {
+    number: '1',
+    title: 'Browse Products',
+    description: 'Explore our catalog and identify the materials that meet your application requirements.',
+  },
+  {
+    number: '2',
+    title: 'Add to Quote List',
+    description: 'Select the products you need and add them to your quote list with quantities.',
+  },
+  {
+    number: '3',
+    title: 'Submit Request',
+    description: 'Complete the form with your details and we will respond with pricing within one business day.',
+  },
+];
+
+const benefits = [
+  'Competitive pricing for bulk and production volumes',
+  'Custom packaging and formulation options',
+  'Sample availability for qualification testing',
+  'Technical data sheets and SDS included',
+  'Dedicated account manager for repeat orders',
+  'Global shipping with tracked logistics',
+];
+---
+
+<PageLayout
+  title="Request a Quote for Specialty Chemicals & Materials"
+  description="Request a quote for specialty chemicals, thermal interface materials, adhesives, and electronic materials from CAPLINQ. Fast response and competitive pricing."
+  jsonLd={jsonLd}
+>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <!-- Page Header -->
+  <section class="bg-gradient-to-br from-navy-900 to-primary-800 text-white">
+    <div class="container-site py-12 lg:py-16">
+      <div class="max-w-3xl">
+        <h1 class="text-4xl lg:text-5xl font-bold leading-tight mb-4">Request a Quote</h1>
+        <p class="text-lg text-primary-100 leading-relaxed">
+          Get competitive pricing for specialty chemicals and electronic materials. Our team
+          responds to quote requests within one business day.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Three-Step Process -->
+  <section class="py-12 lg:py-16 bg-gray-50 border-b border-gray-200">
+    <div class="container-site">
+      <div class="text-center mb-10">
+        <h2 class="text-2xl font-bold text-navy-900 mb-2">How It Works</h2>
+        <p class="text-gray-600">Getting a quote from CAPLINQ is straightforward.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {steps.map((step, index) => (
+          <div class="relative text-center">
+            <div class="w-14 h-14 bg-primary-600 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
+              {step.number}
+            </div>
+            {index < steps.length - 1 && (
+              <div class="hidden md:block absolute top-7 left-[calc(50%+2rem)] w-[calc(100%-4rem)] h-0.5 bg-primary-200" />
+            )}
+            <h3 class="text-lg font-semibold text-navy-900 mb-2">{step.title}</h3>
+            <p class="text-sm text-gray-600">{step.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Quote Form + Benefits -->
+  <section class="py-12 lg:py-16">
+    <div class="container-site">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+
+        <!-- Quote Form -->
+        <div class="lg:col-span-2">
+          <div class="bg-white rounded-lg border border-gray-200 p-6 lg:p-8">
+            <h2 class="text-2xl font-bold text-navy-900 mb-2">Quote Request Form</h2>
+            <p class="text-gray-600 mb-6">
+              Fill out the form below with your requirements and our sales team will prepare
+              a detailed quote for you.
+            </p>
+
+            <QuoteRequestForm client:only="svelte" />
+          </div>
+        </div>
+
+        <!-- Side Panel -->
+        <div class="lg:col-span-1 space-y-6">
+
+          <!-- Benefits -->
+          <div class="bg-gray-50 rounded-lg border border-gray-200 p-6">
+            <h3 class="text-lg font-semibold text-navy-900 mb-4">Why Request a Quote?</h3>
+            <ul class="space-y-3">
+              {benefits.map((benefit) => (
+                <li class="flex items-start gap-3">
+                  <svg class="w-5 h-5 text-primary-600 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span class="text-sm text-gray-600">{benefit}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <!-- Contact for Questions -->
+          <div class="bg-primary-50 rounded-lg border border-primary-200 p-6">
+            <h3 class="text-lg font-semibold text-navy-900 mb-3">Have Questions?</h3>
+            <p class="text-sm text-gray-600 mb-4">
+              Need help identifying the right product or have questions about specifications?
+              Our technical team can assist before you submit your quote request.
+            </p>
+            <div class="space-y-2">
+              <a
+                href={`mailto:${SITE.email}`}
+                class="flex items-center gap-2 text-sm text-primary-600 hover:text-primary-700 font-medium transition-colors"
+              >
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                {SITE.email}
+              </a>
+              <a
+                href="/contact"
+                class="flex items-center gap-2 text-sm text-primary-600 hover:text-primary-700 font-medium transition-colors"
+              >
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                Contact Us
+              </a>
+            </div>
+          </div>
+
+          <!-- Browse Products -->
+          <div class="bg-white rounded-lg border border-gray-200 p-6">
+            <h3 class="text-lg font-semibold text-navy-900 mb-3">Not Sure What You Need?</h3>
+            <p class="text-sm text-gray-600 mb-4">
+              Browse our product catalog to find the right specialty chemicals and electronic
+              materials for your application.
+            </p>
+            <a href="/products" class="btn-secondary text-sm w-full justify-center">
+              Browse Products
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</PageLayout>

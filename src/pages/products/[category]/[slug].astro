@@ -1,0 +1,332 @@
+---
+import { getCollection, render } from 'astro:content';
+import PageLayout from '../../../layouts/PageLayout.astro';
+import Breadcrumbs from '../../../components/layout/Breadcrumbs.astro';
+import ProductCard from '../../../components/product/ProductCard.astro';
+import Badge from '../../../components/ui/Badge.astro';
+import Button from '../../../components/ui/Button.astro';
+import AddToQuote from '../../../components/product/AddToQuote.svelte';
+import ImageGallery from '../../../components/product/ImageGallery.svelte';
+import { getCategoryBreadcrumbs } from '../../../lib/utils/categories';
+
+export async function getStaticPaths() {
+  const allProducts = await getCollection('products');
+  const allCategories = await getCollection('categories');
+
+  // Build a lookup map for category names
+  const categoryNameMap = new Map(allCategories.map((c) => [c.data.slug, c.data.name]));
+
+  return allProducts.map((product) => {
+    // Find related products
+    const relatedProducts = allProducts.filter((p) =>
+      product.data.relatedProducts.includes(p.data.slug),
+    );
+
+    // Build category breadcrumbs
+    const categoryBreadcrumbs = getCategoryBreadcrumbs(
+      product.data.category,
+      allCategories,
+    );
+
+    return {
+      params: {
+        category: product.data.category,
+        slug: product.data.slug,
+      },
+      props: {
+        product,
+        relatedProducts,
+        categoryBreadcrumbs,
+        categoryNameMap: Object.fromEntries(categoryNameMap),
+      },
+    };
+  });
+}
+
+const { product, relatedProducts, categoryBreadcrumbs, categoryNameMap } = Astro.props;
+const { Content } = await render(product);
+
+const data = product.data;
+
+const pageTitle = data.seoTitle || `${data.name} — ${data.brand}`;
+const pageDescription = data.seoDescription || data.shortDescription;
+
+// Breadcrumb items
+const breadcrumbItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Products', href: '/products' },
+  ...categoryBreadcrumbs,
+  { label: data.name },
+];
+
+// Status badge mapping
+const statusVariants: Record<string, 'success' | 'warning' | 'error'> = {
+  active: 'success',
+  'coming-soon': 'warning',
+  discontinued: 'error',
+};
+
+const statusLabels: Record<string, string> = {
+  active: 'In Stock',
+  'coming-soon': 'Coming Soon',
+  discontinued: 'Discontinued',
+};
+
+// Document type labels
+const docTypeLabels: Record<string, string> = {
+  TDS: 'Technical Data Sheet',
+  SDS: 'Safety Data Sheet',
+  Brochure: 'Brochure',
+  ApplicationNote: 'Application Note',
+  CaseStudy: 'Case Study',
+};
+
+// JSON-LD Product structured data
+const productJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: data.name,
+  description: data.shortDescription,
+  sku: data.sku,
+  mpn: data.manufacturerPartNo || data.sku,
+  brand: {
+    '@type': 'Brand',
+    name: data.brand,
+  },
+  category: categoryNameMap[data.category] || data.category,
+  image: data.images.length > 0 ? `https://www.caplinq.com${data.images[0]}` : undefined,
+  offers: {
+    '@type': 'Offer',
+    availability: data.status === 'active'
+      ? 'https://schema.org/InStock'
+      : data.status === 'coming-soon'
+        ? 'https://schema.org/PreOrder'
+        : 'https://schema.org/Discontinued',
+    priceCurrency: 'USD',
+    price: '0',
+    priceSpecification: {
+      '@type': 'PriceSpecification',
+      description: 'Contact for pricing',
+    },
+  },
+};
+---
+
+<PageLayout title={pageTitle} description={pageDescription} jsonLd={productJsonLd}>
+  <Breadcrumbs items={breadcrumbItems} />
+
+  <!-- Product Header -->
+  <section class="py-8 lg:py-12">
+    <div class="container-site">
+      {/* Image Gallery */}
+      {data.images.length > 0 && (
+        <div class="mb-8 max-w-2xl">
+          <ImageGallery images={data.images} productName={data.name} client:visible />
+        </div>
+      )}
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+        <!-- Product Info (2 cols) -->
+        <div class="lg:col-span-2">
+          <div class="flex flex-wrap items-center gap-3 mb-4">
+            <Badge variant={statusVariants[data.status]} size="md">
+              {statusLabels[data.status]}
+            </Badge>
+            {data.featured && (
+              <Badge variant="primary" size="md">Featured</Badge>
+            )}
+          </div>
+
+          <h1 class="text-3xl lg:text-4xl font-bold text-navy-900">{data.name}</h1>
+
+          <div class="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-500">
+            <span>SKU: <span class="font-medium text-gray-700">{data.sku}</span></span>
+            {data.manufacturerPartNo && (
+              <span>MPN: <span class="font-medium text-gray-700">{data.manufacturerPartNo}</span></span>
+            )}
+            <span>Brand: <span class="font-medium text-gray-700">{data.brand}</span></span>
+          </div>
+
+          <p class="mt-6 text-lg text-gray-600 leading-relaxed">{data.shortDescription}</p>
+        </div>
+
+        <!-- Quote Action (1 col) -->
+        <div class="lg:col-span-1">
+          <div class="bg-gray-50 rounded-lg border border-gray-200 p-6 sticky top-24">
+            <h2 class="text-lg font-semibold text-navy-900 mb-2">Interested in this product?</h2>
+            <p class="text-sm text-gray-600 mb-4">
+              Contact our team for pricing, availability, and technical support.
+            </p>
+            <AddToQuote sku={data.sku} name={data.name} client:idle />
+            <Button variant="secondary" size="md" href="/contact" class="w-full mt-3">
+              Contact Sales
+            </Button>
+            <div class="mt-4 pt-4 border-t border-gray-200">
+              <p class="text-xs text-gray-500">
+                CAPLINQ offers competitive B2B pricing with volume discounts. Request a quote for your specific requirements.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Specifications -->
+  {Object.keys(data.specifications).length > 0 && (
+    <section class="bg-gray-50 py-8 lg:py-12">
+      <div class="container-site">
+        <h2 class="text-2xl font-bold text-navy-900 mb-6">Specifications</h2>
+        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+          <table class="w-full text-sm">
+            <tbody>
+              {Object.entries(data.specifications).map(([key, value], index) => (
+                <tr class={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                  <td class="px-6 py-3 font-medium text-gray-700 w-1/2 border-b border-gray-100">
+                    {key}
+                  </td>
+                  <td class="px-6 py-3 text-gray-900 border-b border-gray-100">{value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Specification Groups (if present) -->
+  {data.specificationGroups && data.specificationGroups.length > 0 && (
+    <section class="py-8 lg:py-12">
+      <div class="container-site">
+        <h2 class="text-2xl font-bold text-navy-900 mb-6">Detailed Specifications</h2>
+        <div class="space-y-8">
+          {data.specificationGroups.map((group) => (
+            <div>
+              <h3 class="text-lg font-semibold text-navy-900 mb-3">{group.groupName}</h3>
+              <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                <table class="w-full text-sm">
+                  <tbody>
+                    {Object.entries(group.specs).map(([key, value], index) => (
+                      <tr class={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                        <td class="px-6 py-3 font-medium text-gray-700 w-1/2 border-b border-gray-100">
+                          {key}
+                        </td>
+                        <td class="px-6 py-3 text-gray-900 border-b border-gray-100">
+                          {value}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Documents -->
+  {data.documents.length > 0 && (
+    <section class="py-8 lg:py-12">
+      <div class="container-site">
+        <h2 class="text-2xl font-bold text-navy-900 mb-6">Documents & Resources</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {data.documents.map((doc) => (
+            <a
+              href={doc.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-start gap-4 bg-white rounded-lg border border-gray-200 p-4 hover:border-primary-300 hover:shadow-sm transition-all"
+            >
+              <div class="shrink-0 mt-0.5">
+                <svg class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                </svg>
+              </div>
+              <div>
+                <p class="font-medium text-navy-900">{doc.title}</p>
+                <p class="text-sm text-gray-500 mt-0.5">
+                  {docTypeLabels[doc.type] || doc.type}
+                  {doc.fileSize && ` — ${doc.fileSize}`}
+                </p>
+              </div>
+              <div class="ml-auto shrink-0 self-center">
+                <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Applications & Industries -->
+  {(data.applications.length > 0 || data.industries.length > 0) && (
+    <section class="bg-gray-50 py-8 lg:py-12">
+      <div class="container-site">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {data.applications.length > 0 && (
+            <div>
+              <h2 class="text-xl font-bold text-navy-900 mb-4">Applications</h2>
+              <div class="flex flex-wrap gap-2">
+                {data.applications.map((app: string) => (
+                  <span class="inline-flex items-center rounded-full bg-primary-50 text-primary-700 text-sm font-medium px-3 py-1">
+                    {app}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+          {data.industries.length > 0 && (
+            <div>
+              <h2 class="text-xl font-bold text-navy-900 mb-4">Industries Served</h2>
+              <div class="flex flex-wrap gap-2">
+                {data.industries.map((ind: string) => (
+                  <span class="inline-flex items-center rounded-full bg-navy-50 text-navy-700 text-sm font-medium px-3 py-1">
+                    {ind}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Product Description (Markdown body) -->
+  <section class="py-8 lg:py-12">
+    <div class="container-site">
+      <div class="max-w-3xl prose prose-lg prose-navy">
+        <Content />
+      </div>
+    </div>
+  </section>
+
+  <!-- Related Products -->
+  {relatedProducts.length > 0 && (
+    <section class="bg-gray-50 py-8 lg:py-12">
+      <div class="container-site">
+        <h2 class="text-2xl font-bold text-navy-900 mb-6">Related Products</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {relatedProducts.map((related: any) => (
+            <ProductCard
+              name={related.data.name}
+              slug={related.data.slug}
+              sku={related.data.sku}
+              category={related.data.category}
+              categoryName={categoryNameMap[related.data.category]}
+              shortDescription={related.data.shortDescription}
+              specifications={related.data.specifications}
+              featured={related.data.featured}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</PageLayout>
