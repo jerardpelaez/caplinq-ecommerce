@@ -198,6 +198,7 @@
             ? 'bg-primary-50'
             : 'hover:bg-gray-50'}"
           onclick={() => navigateToProduct(product)}
+          onkeydown={(e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigateToProduct(product); } }}
           onmouseenter={() => (selectedIndex = i)}
         >
           <div class="flex items-start justify-between gap-2">

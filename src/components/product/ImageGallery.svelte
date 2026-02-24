@@ -43,10 +43,7 @@
   <!-- Main image -->
   <div
     class="relative overflow-hidden rounded-lg border border-gray-200 bg-gray-50"
-    role="img"
     aria-label="{productName} - Image {selectedIndex + 1} of {images.length}"
-    tabindex="0"
-    onkeydown={handleKeydown}
   >
     {#if currentImage}
       <div class="flex aspect-square items-center justify-center p-4">
