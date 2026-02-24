@@ -50,3 +50,23 @@ export const IMAGE_WIDTHS = [320, 640, 960, 1280] as const;
 export function getPlaceholderImage(_productName: string): string {
   return '/images/placeholder-product.svg';
 }
+
+// CDN URL builders for Caplinq product images
+const IMAGE_CDN_BASE = 'https://images.caplinq.com/';
+const CLOUDFLARE_CDN_BASE = 'https://www.caplinq.com/cdn-cgi/image/';
+
+export function getFullImageUrl(imageName: string): string {
+  return `${IMAGE_CDN_BASE}${imageName}`;
+}
+
+export function getCdnImageUrl(imageName: string, width: number, height?: number): string {
+  const dims = height ? `width=${width},height=${height}` : `width=${width}`;
+  return `${CLOUDFLARE_CDN_BASE}${dims},quality=75,format=auto/${IMAGE_CDN_BASE}${imageName}`;
+}
+
+export function getMainImageName(images: Array<{ name: string; isMain: boolean; sortOrder: number }>): string | undefined {
+  if (images.length === 0) return undefined;
+  const main = images.find(img => img.isMain);
+  if (main) return main.name;
+  return [...images].sort((a, b) => a.sortOrder - b.sortOrder)[0]?.name;
+}
