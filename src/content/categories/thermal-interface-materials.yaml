@@ -1,6 +1,6 @@
-name: "Thermal Interface Materials"
-slug: "thermal-interface-materials"
-description: "High-performance thermal interface materials (TIMs) engineered to minimize thermal resistance between heat-generating components and heat sinks. Our portfolio includes greases, pads, gap fillers, and phase change materials for electronics cooling in automotive, telecom, and industrial applications."
-displayOrder: 1
-featured: true
-seoDescription: "Shop high-performance thermal interface materials (TIMs) including thermal greases, pads, gap fillers, and phase change materials. Engineered for reliable heat dissipation in electronics assemblies."
+apiId: 180
+name: Thermal Interface Materials
+slug: thermal-interface-materials
+description: Thermal Interface Materials
+displayOrder: 14
+featured: false

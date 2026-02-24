@@ -1,7 +1,7 @@
-name: "Phase Change Materials"
-slug: "phase-change-materials"
-parentCategory: "thermal-interface-materials"
-description: "Phase change thermal interface materials that transition from solid to semi-liquid at operating temperatures, filling microscopic surface irregularities to achieve ultra-low thermal impedance. These materials combine the ease of handling of pads with the performance characteristics of greases."
-displayOrder: 3
+apiId: 181
+name: Phase Change Materials
+slug: phase-change-materials
+parentCategory: thermal-interface-materials
+description: Phase Change Materials
+displayOrder: 0
 featured: false
-seoDescription: "Shop phase change thermal interface materials that deliver grease-like thermal performance with pad-like handling convenience. Ideal for high-reliability electronics cooling."

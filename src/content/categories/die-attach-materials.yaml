@@ -1,6 +1,6 @@
-name: "Die Attach Materials"
-slug: "die-attach-materials"
-description: "Precision die attach materials for semiconductor packaging, including films, pastes, and sintering solutions. Formulated to deliver superior thermal conductivity, electrical performance, and long-term reliability in chip-to-substrate bonding applications."
+apiId: 162
+name: Die Attach Materials
+slug: die-attach-materials
+description: Die Attach Materials
 displayOrder: 2
-featured: true
-seoDescription: "Browse die attach materials for semiconductor packaging — films, pastes, and sintering materials engineered for high thermal conductivity and reliable chip-to-substrate bonding."
+featured: false

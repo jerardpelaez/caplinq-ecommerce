@@ -5,7 +5,6 @@ import type {
   SpecificationSectionDto,
   SpecPropertyDto,
   FileDto,
-  ImageDetailDto,
 } from '../api/types';
 import { getCdnImageUrl, getMainImageName } from './images';
 
