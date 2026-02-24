@@ -1,0 +1,37 @@
+---
+title: "Die Attach Materials for Modern Semiconductor Packaging"
+slug: "die-attach-materials-semiconductor-packaging"
+author: "CAPLINQ Technical Team"
+publishDate: "2024-11-15"
+category: "Industry Insights"
+tags:
+  - "Die Attach"
+  - "Semiconductor"
+  - "Packaging"
+excerpt: "Die attach materials play a foundational role in semiconductor packaging reliability and performance. Explore current trends in material selection, process integration, and long-term reliability."
+seoDescription: "Guide to die attach materials for semiconductor packaging. Covers epoxy, solder, and sintered silver die attach, plus reliability considerations and selection criteria for modern IC packages."
+relatedProducts:
+  - "linqbond-daf-300"
+  - "linqbond-dap-500"
+draft: false
+---
+
+## The Role of Die Attach in Semiconductor Packaging
+
+Die attach is the process step in which a semiconductor die is bonded to a substrate, lead frame, or interposer, forming the mechanical, thermal, and in many cases electrical foundation of the packaged device. While often overshadowed by more visible process steps such as wafer fabrication or wire bonding, the die attach material and process have a disproportionate influence on package-level reliability. The die attach layer must maintain mechanical integrity across a wide temperature range, typically from -65 to 175 degrees Celsius for automotive-grade components, while accommodating the coefficient of thermal expansion (CTE) mismatch between the silicon die (approximately 2.6 ppm/K) and the substrate material, which can range from 4.5 ppm/K for aluminum nitride ceramics to 17 ppm/K for copper lead frames. A failure at the die attach interface, whether through delamination, cracking, or voiding, can cause catastrophic electrical failure or, more insidiously, a gradual increase in thermal resistance that pushes the die junction temperature beyond its rated limit.
+
+## Material Categories and Their Applications
+
+Die attach materials fall into three broad categories: organic adhesives, metallic solders, and sintered metal systems, each occupying a distinct region of the performance and cost landscape. **Epoxy-based die attach adhesives** are the workhorse of the industry, accounting for the majority of commercial IC packaging. They are available in paste form for dispensing or stamping and as die attach films (DAFs) that are pre-applied to the wafer backside before dicing. Silver-filled conductive epoxies provide both electrical grounding and moderate thermal conductivity in the range of 2 to 25 W/mK, while non-conductive formulations are used where die-to-substrate isolation is required. **Solder die attach** using alloys such as AuSn (80/20), SAC305, or bismuth-based low-temperature solders provides metallic bonding with thermal conductivities exceeding 50 W/mK, making it the preferred choice for high-power devices such as laser diodes, RF power amplifiers, and IGBTs. The trade-off is higher process temperatures, the need for flux or reducing atmospheres, and greater susceptibility to CTE-induced fatigue in large die formats. **Sintered silver** has emerged as a leading solution for wide-bandgap semiconductor packaging, including silicon carbide (SiC) and gallium nitride (GaN) devices, where junction temperatures can exceed the limits of conventional solder alloys. Pressure-assisted sintering at 200 to 300 degrees Celsius produces a porous silver bond layer with a thermal conductivity approaching 200 W/mK and a melting point near that of bulk silver (962 degrees Celsius), delivering exceptional high-temperature stability.
+
+## Trends Driving Material Innovation
+
+Several converging trends in the semiconductor industry are reshaping die attach material requirements. The transition to wide-bandgap (WBG) semiconductors for power electronics and EV traction inverters demands die attach solutions capable of sustained operation at 200 degrees Celsius and above, ruling out most conventional solder alloys and many epoxy systems. At the same time, heterogeneous integration and advanced packaging architectures such as 2.5D interposers, fan-out wafer-level packages (FOWLP), and chiplet-based designs are increasing the number and complexity of die attach interfaces within a single package. Thinner die, now routinely thinned to 50 micrometers or less for stacked-die configurations, require die attach films with precisely controlled adhesion and flow characteristics to prevent die cracking during pick-and-place and to minimize fillet formation that can interfere with wire bonding. Additionally, the automotive industry's adoption of AEC-Q100 and AEC-Q104 qualification standards has raised the bar for long-term reliability, demanding die attach materials that can survive thousands of thermal cycles from -40 to 175 degrees Celsius without significant degradation in shear strength or thermal impedance.
+
+## Reliability Considerations and Testing
+
+Reliability qualification of die attach materials follows well-established standards but requires careful interpretation to ensure relevance to the actual use environment. JEDEC's JESD22-A104 thermal cycling test and JESD22-A110 highly accelerated stress test (HAST) are commonly used to evaluate die attach integrity under thermal and moisture stress, respectively. Die shear testing per MIL-STD-883 provides a baseline measure of bond strength, but the failure mode is often more informative than the absolute shear force value. A cohesive failure within the die attach material, for instance, indicates that the adhesive's bulk strength has been exceeded, while an adhesive failure at the die or substrate interface suggests a surface preparation or wetting issue. Scanning acoustic microscopy (SAM) is the standard non-destructive technique for detecting voids and delaminations at the die attach interface, with most quality specifications limiting voiding to 20 to 30 percent of the die area for standard applications and less than 5 percent for high-reliability or high-power devices. Cross-sectional analysis by SEM and EDX provides detailed insight into bond line thickness uniformity, filler distribution, and the presence of intermetallic compounds at metallic interfaces.
+
+## Selecting the Right Die Attach Material
+
+Choosing the optimal die attach material begins with a clear definition of the application requirements, including the maximum junction temperature, power dissipation, die size, substrate material, and the target reliability profile. For cost-sensitive consumer applications with moderate thermal requirements, silver-filled epoxy pastes or DAFs offer an excellent balance of performance, process compatibility, and supply chain availability. High-power applications such as automotive IGBT modules and industrial motor drives benefit from solder or sintered silver die attach, with the choice between the two driven primarily by the maximum operating temperature and the acceptable process complexity. CAPLINQ's LinqBond product portfolio includes both die attach films and die attach pastes engineered for a range of packaging platforms, from conventional lead frame packages to advanced fan-out and system-in-package designs. Our materials are designed to meet the stringent requirements of automotive and industrial end markets, and our technical team can support customers through material selection, process optimization, and reliability qualification.

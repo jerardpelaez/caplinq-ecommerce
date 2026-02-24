@@ -1,0 +1,82 @@
+---
+import PageLayout from './PageLayout.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  author: string;
+  publishDate: Date;
+  updatedDate?: Date;
+  category: string;
+  tags?: string[];
+  featuredImage?: string;
+  jsonLd?: Record<string, unknown>;
+}
+
+const { title, description, author, publishDate, updatedDate, category, tags = [], featuredImage, jsonLd } = Astro.props;
+
+const formattedDate = publishDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<PageLayout title={title} description={description} ogImage={featuredImage} jsonLd={jsonLd}>
+  <!-- Breadcrumbs -->
+  <nav class="bg-gray-50 border-b border-gray-200" aria-label="Breadcrumb">
+    <div class="container-site py-3">
+      <ol class="flex items-center gap-2 text-sm text-gray-500">
+        <li><a href="/" class="hover:text-primary-600 transition-colors">Home</a></li>
+        <li class="flex items-center gap-2">
+          <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+          <a href="/blog" class="hover:text-primary-600 transition-colors">Blog</a>
+        </li>
+        <li class="flex items-center gap-2">
+          <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+          <span class="text-gray-900 font-medium">{title}</span>
+        </li>
+      </ol>
+    </div>
+  </nav>
+
+  <article class="container-site py-8 lg:py-12">
+    <div class="max-w-3xl mx-auto">
+      <!-- Article header -->
+      <header class="mb-8">
+        <div class="flex items-center gap-3 text-sm text-gray-500 mb-4">
+          <span class="bg-primary-100 text-primary-700 px-2.5 py-0.5 rounded-full font-medium text-xs">{category}</span>
+          <time datetime={publishDate.toISOString()}>{formattedDate}</time>
+          {updatedDate && <span>(Updated {updatedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })})</span>}
+        </div>
+        <h1 class="text-3xl lg:text-4xl font-bold text-navy-900 leading-tight">{title}</h1>
+        <p class="mt-4 text-lg text-gray-600">By {author}</p>
+      </header>
+
+      {featuredImage && (
+        <img src={featuredImage} alt={title} class="w-full rounded-lg mb-8 aspect-video object-cover" />
+      )}
+
+      <!-- Article content -->
+      <div class="prose prose-lg max-w-none prose-headings:text-navy-900 prose-a:text-primary-600 prose-a:no-underline hover:prose-a:underline">
+        <slot />
+      </div>
+
+      <!-- Tags -->
+      {tags.length > 0 && (
+        <div class="mt-8 pt-6 border-t border-gray-200">
+          <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Tags</h2>
+          <div class="flex flex-wrap gap-2">
+            {tags.map(tag => (
+              <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">{tag}</span>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </article>
+</PageLayout>

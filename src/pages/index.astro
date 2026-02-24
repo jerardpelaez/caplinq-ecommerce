@@ -1,17 +1,207 @@
 ---
+import PageLayout from '../layouts/PageLayout.astro';
+import { getCollection } from 'astro:content';
 
+// Fetch featured products and categories
+const allProducts = await getCollection('products', ({ data }) => data.status === 'active');
+const featuredProducts = allProducts.filter((p) => p.data.featured).slice(0, 6);
+const categories = await getCollection('categories');
+const topCategories = categories.filter((c) => !c.data.parentCategory && c.data.featured);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'CAPLINQ',
+  url: 'https://www.caplinq.com',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: 'https://www.caplinq.com/search?q={search_term_string}',
+    'query-input': 'required name=search_term_string',
+  },
+};
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<PageLayout title="Home" jsonLd={jsonLd}>
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-navy-900 to-primary-800 text-white">
+    <div class="container-site py-16 lg:py-24">
+      <div class="max-w-3xl">
+        <h1 class="text-4xl lg:text-5xl font-bold leading-tight mb-6">
+          Specialty Chemicals &<br />Electronic Materials
+        </h1>
+        <p class="text-lg lg:text-xl text-primary-100 mb-8 leading-relaxed">
+          CAPLINQ supplies high-performance thermal interface materials, adhesives,
+          encapsulants, and specialty chemicals for the electronics and semiconductor industries.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="/products" class="btn-accent text-base px-6 py-3">
+            Browse Products
+          </a>
+          <a href="/quote-request" class="btn-secondary !text-white !border-white/30 hover:!bg-white/10 text-base px-6 py-3">
+            Request a Quote
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Categories -->
+  <section class="py-16 bg-gray-50">
+    <div class="container-site">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-navy-900 mb-4">Product Categories</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+          Explore our range of specialty chemicals and electronic materials, engineered for demanding applications.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {topCategories.sort((a, b) => a.data.displayOrder - b.data.displayOrder).map((category) => (
+          <a
+            href={`/products/${category.data.slug}`}
+            class="group bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg hover:border-primary-300 transition-all duration-200"
+          >
+            <h3 class="text-lg font-semibold text-navy-900 group-hover:text-primary-600 transition-colors mb-2">
+              {category.data.name}
+            </h3>
+            <p class="text-sm text-gray-600 leading-relaxed">
+              {category.data.description}
+            </p>
+            <span class="inline-flex items-center gap-1 text-sm font-medium text-primary-600 mt-4">
+              View Products
+              <svg class="h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  {featuredProducts.length > 0 && (
+    <section class="py-16">
+      <div class="container-site">
+        <div class="flex items-center justify-between mb-10">
+          <div>
+            <h2 class="text-3xl font-bold text-navy-900 mb-2">Featured Products</h2>
+            <p class="text-gray-600">Our most popular specialty chemicals and materials.</p>
+          </div>
+          <a href="/products" class="btn-secondary hidden sm:inline-flex">
+            View All Products
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {featuredProducts.map((product) => {
+            const categoryData = categories.find((c) => c.data.slug === product.data.category);
+            return (
+              <article class="group bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg hover:border-primary-300 transition-all duration-200">
+                <div class="p-6">
+                  {categoryData && (
+                    <span class="text-xs font-medium text-primary-600 uppercase tracking-wider">
+                      {categoryData.data.name}
+                    </span>
+                  )}
+                  <h3 class="text-lg font-semibold text-navy-900 mt-2 group-hover:text-primary-600 transition-colors">
+                    <a href={`/products/${product.data.category}/${product.data.slug}`}>
+                      {product.data.name}
+                    </a>
+                  </h3>
+                  <p class="text-sm text-gray-600 mt-2 line-clamp-2">
+                    {product.data.shortDescription}
+                  </p>
+
+                  {/* Key specs preview */}
+                  <div class="mt-4 space-y-1">
+                    {Object.entries(product.data.specifications).slice(0, 3).map(([key, value]) => (
+                      <div class="flex justify-between text-xs">
+                        <span class="text-gray-500">{key}</span>
+                        <span class="font-medium text-gray-700">{value}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
+                    <a
+                      href={`/products/${product.data.category}/${product.data.slug}`}
+                      class="text-sm font-medium text-primary-600 hover:text-primary-700"
+                    >
+                      View Details
+                    </a>
+                    <span class="text-xs text-gray-400">SKU: {product.data.sku}</span>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+
+        <div class="text-center mt-8 sm:hidden">
+          <a href="/products" class="btn-secondary">View All Products</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Value Propositions -->
+  <section class="py-16 bg-gray-50">
+    <div class="container-site">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="text-center">
+          <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-navy-900 mb-2">Quality Assured</h3>
+          <p class="text-sm text-gray-600">
+            Every product comes with comprehensive technical data sheets and safety data sheets for your quality assurance needs.
+          </p>
+        </div>
+
+        <div class="text-center">
+          <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-navy-900 mb-2">Technical Expertise</h3>
+          <p class="text-sm text-gray-600">
+            Our team of materials scientists and engineers can help you select the right material for your specific application.
+          </p>
+        </div>
+
+        <div class="text-center">
+          <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-navy-900 mb-2">Global Supply</h3>
+          <p class="text-sm text-gray-600">
+            With warehouses in North America and Europe, we provide reliable supply chain solutions for customers worldwide.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 bg-primary-700">
+    <div class="container-site text-center">
+      <h2 class="text-3xl font-bold text-white mb-4">Need Help Selecting the Right Material?</h2>
+      <p class="text-primary-100 max-w-2xl mx-auto mb-8">
+        Our technical team can help you identify the optimal material solution for your application.
+        Request a quote or contact us for expert guidance.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="/quote-request" class="btn-accent text-base px-6 py-3">Request a Quote</a>
+        <a href="/contact" class="bg-white/10 text-white border border-white/30 hover:bg-white/20 inline-flex items-center justify-center px-6 py-3 rounded-md font-semibold text-base transition-all">
+          Contact Us
+        </a>
+      </div>
+    </div>
+  </section>
+</PageLayout>

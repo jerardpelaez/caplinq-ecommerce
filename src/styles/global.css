@@ -1,0 +1,176 @@
+@import "tailwindcss";
+
+/* ===========================
+   CAPLINQ Brand Design System
+   =========================== */
+
+@theme {
+  /* Brand Colors */
+  --color-primary-50: #e6f0fa;
+  --color-primary-100: #cce0f5;
+  --color-primary-200: #99c2eb;
+  --color-primary-300: #66a3e0;
+  --color-primary-400: #3385d6;
+  --color-primary-500: #0066cc;
+  --color-primary-600: #0052a3;
+  --color-primary-700: #003d7a;
+  --color-primary-800: #002952;
+  --color-primary-900: #001429;
+
+  /* Navy/Dark */
+  --color-navy-800: #1a2332;
+  --color-navy-900: #0d1117;
+
+  /* Accent - Orange */
+  --color-accent-400: #fb923c;
+  --color-accent-500: #f97316;
+  --color-accent-600: #ea580c;
+
+  /* Success */
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+
+  /* Warning */
+  --color-warning-500: #eab308;
+  --color-warning-600: #ca8a04;
+
+  /* Error */
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Spacing Scale */
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
+
+  /* Container */
+  --container-max: 1280px;
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+}
+
+/* ===========================
+   Base Styles
+   =========================== */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: #1a2332;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===========================
+   Reusable Component Classes
+   =========================== */
+
+@utility container-site {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@utility btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: white;
+  background-color: var(--color-primary-600);
+  border-radius: var(--radius-md);
+  transition: background-color 0.15s ease;
+  &:hover {
+    background-color: var(--color-primary-700);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--color-primary-500);
+    outline-offset: 2px;
+  }
+}
+
+@utility btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--color-primary-700);
+  background-color: white;
+  border: 1px solid var(--color-primary-300);
+  border-radius: var(--radius-md);
+  transition: all 0.15s ease;
+  &:hover {
+    background-color: var(--color-primary-50);
+    border-color: var(--color-primary-500);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--color-primary-500);
+    outline-offset: 2px;
+  }
+}
+
+@utility btn-accent {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: white;
+  background-color: var(--color-accent-500);
+  border-radius: var(--radius-md);
+  transition: background-color 0.15s ease;
+  &:hover {
+    background-color: var(--color-accent-600);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--color-accent-500);
+    outline-offset: 2px;
+  }
+}
+
+/* ===========================
+   Focus Visible for Accessibility
+   =========================== */
+
+:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* ===========================
+   Skip to Main Content
+   =========================== */
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  padding: 0.5rem 1rem;
+  background: var(--color-primary-600);
+  color: white;
+  z-index: 100;
+  font-weight: 600;
+  &:focus {
+    top: 0;
+  }
+}
