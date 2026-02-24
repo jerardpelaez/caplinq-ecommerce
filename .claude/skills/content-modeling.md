@@ -3,7 +3,7 @@
 ## Product Data Model
 
 ### Core Product Fields (from Legacy Analysis)
-The legacy CAPLINQ system (VirtueMart/Joomla) tracked these fields:
+The legacy Krayden system (VirtueMart/Joomla) tracked these fields:
 - Product ID, Name, SKU, Manufacturer Part Number
 - Short Description, Full Description (HTML/markdown)
 - Category (hierarchical — parent category → subcategory)
@@ -31,7 +31,7 @@ const products = defineCollection({
     slug: z.string(),
     sku: z.string(),
     manufacturerPartNo: z.string().optional(),
-    brand: z.string().default('CAPLINQ'),
+    brand: z.string().default('Krayden'),
 
     // Classification
     category: z.string(), // category slug
@@ -114,7 +114,7 @@ const blog = defineCollection({
 export const collections = { products, categories, blog };
 ```
 
-## Product Taxonomy (from Legacy CAPLINQ)
+## Product Taxonomy (from Legacy Krayden)
 
 ### Category Hierarchy
 ```
@@ -179,7 +179,7 @@ name: "LinQTherm TPG-800"
 slug: "linqtherm-tpg-800"
 sku: "LQ-TPG-800"
 manufacturerPartNo: "TPG-800"
-brand: "CAPLINQ"
+brand: "Krayden"
 category: "thermal-greases-pastes"
 applications:
   - Thermal Management
@@ -224,7 +224,7 @@ parentCategory: "thermal-interface-materials"
 description: "High-performance thermal greases and pastes for heat transfer applications"
 displayOrder: 1
 featured: true
-seoDescription: "Browse CAPLINQ's range of thermal greases and pastes with conductivities from 1 to 12 W/mK"
+seoDescription: "Browse Krayden's range of thermal greases and pastes with conductivities from 1 to 12 W/mK"
 ```
 
 ## Content Query Patterns

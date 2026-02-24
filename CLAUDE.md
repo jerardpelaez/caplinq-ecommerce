@@ -1,4 +1,4 @@
-# CAPLINQ B2B Ecommerce
+# Krayden B2B Ecommerce
 
 ## Quick Reference
 - **Build**: `npm run build`
@@ -63,7 +63,7 @@ src/
 - **Blog**: title, slug, author, publishDate, tags, excerpt, relatedProducts
 
 ## Brand Colors
-- Primary: Blue (#0066cc scale)
-- Navy: Dark (#0d1117, #1a2332)
-- Accent: Orange (#f97316 scale)
+- Primary: Slate Blue (#3D4760 scale)
+- Navy: Dark (#1a2332, #0f172a)
+- Accent: Krayden Blue (#0066cc scale)
 - Defined as CSS custom properties in `src/styles/global.css`

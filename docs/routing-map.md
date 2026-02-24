@@ -11,7 +11,7 @@
 | `/blog/` | `src/pages/blog/index.astro` | SSG | Blog listing |
 | `/blog/[slug]/` | `src/pages/blog/[slug].astro` | SSG | Blog post |
 | `/resources/` | `src/pages/resources/index.astro` | SSG | Technical resources hub |
-| `/about/` | `src/pages/about.astro` | SSG | About CAPLINQ |
+| `/about/` | `src/pages/about.astro` | SSG | About Krayden |
 | `/contact/` | `src/pages/contact.astro` | SSG | Contact page with form |
 | `/quote-request/` | `src/pages/quote-request.astro` | SSG | Quote request form |
 | `/search/` | `src/pages/search.astro` | SSG | Search results page |

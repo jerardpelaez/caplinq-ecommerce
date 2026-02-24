@@ -9,7 +9,7 @@ const products = defineCollection({
     slug: z.string(),
     sku: z.string(),
     manufacturerPartNo: z.string().optional(),
-    brand: z.string().default('CAPLINQ'),
+    brand: z.string().default('Krayden'),
     category: z.string(),
     subcategory: z.string().optional(),
     applications: z.array(z.string()).default([]),

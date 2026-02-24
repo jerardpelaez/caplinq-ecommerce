@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://www.caplinq.com/sitemap-index.xml
+Sitemap: https://www.krayden.com/sitemap-index.xml
 
 # Disallow non-content pages
 Disallow: /search

@@ -1,4 +1,6 @@
 ---
+import { SITE } from '$lib/constants/site';
+
 interface BreadcrumbItem {
   label: string;
   href?: string;
@@ -18,7 +20,7 @@ const jsonLd = JSON.stringify({
     '@type': 'ListItem',
     position: index + 1,
     name: item.label,
-    ...(item.href ? { item: `https://www.caplinq.com${item.href}` } : {}),
+    ...(item.href ? { item: `${SITE.url}${item.href}` } : {}),
   })),
 });
 ---

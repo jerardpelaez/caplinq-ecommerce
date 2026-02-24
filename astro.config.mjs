@@ -11,7 +11,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://www.caplinq.com',
+  site: 'https://www.krayden.com',
   integrations: [
     svelte(),
     sitemap({
@@ -23,7 +23,7 @@ export default defineConfig({
         } else if (item.url.includes('/blog/')) {
           item.changefreq = /** @type {any} */ ('monthly');
           item.priority = 0.7;
-        } else if (item.url === 'https://www.caplinq.com/') {
+        } else if (item.url === 'https://www.krayden.com/') {
           item.changefreq = /** @type {any} */ ('daily');
           item.priority = 1.0;
         } else {

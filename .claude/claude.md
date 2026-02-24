@@ -1,4 +1,4 @@
-# CAPLINQ Ecommerce — Project Intelligence
+# Krayden Ecommerce — Project Intelligence
 
 ## Project Overview
 B2B ecommerce platform for specialty chemicals and electronic materials, built with Astro + Svelte + Tailwind CSS. Modeled after www.caplinq.com.
@@ -95,7 +95,7 @@ Handles: Writing tests, accessibility audits, cross-browser testing, performance
 Phase 1: Project setup, design system, base components, content schemas, and homepage.
 
 ## Legacy Codebase
-We have access to the existing CAPLINQ codebase at `/home/jerardpelaez/frontend-dev-workspace/website` for reference. It is being FULLY REPLACED.
+We have access to the existing Krayden codebase at `/home/jerardpelaez/frontend-dev-workspace/website` for reference. It is being FULLY REPLACED.
 - USE IT FOR: understanding data models, business rules, product taxonomy, feature requirements, content structure
 - NEVER: copy code, port patterns, reuse components, or follow its architecture
 - Treat it as a "requirements doc written in bad code" — extract knowledge, discard implementation

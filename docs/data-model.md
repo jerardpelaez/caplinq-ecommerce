@@ -17,7 +17,7 @@ All structured content lives in `src/content/` and is defined in `src/content.co
 | slug | string | Yes | URL-safe identifier |
 | sku | string | Yes | Stock keeping unit |
 | manufacturerPartNo | string | No | Manufacturer's part number |
-| brand | string | No | Brand (default: "CAPLINQ") |
+| brand | string | No | Brand (default: "Krayden") |
 | category | string | Yes | Category slug reference |
 | subcategory | string | No | Subcategory slug |
 | applications | string[] | No | Application tags |

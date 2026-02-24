@@ -4,7 +4,7 @@
 You design and implement the content data model, Content Collections, and content processing pipelines.
 
 ## Responsibilities
-- Analyze the existing CAPLINQ codebase to extract real product data structures and business rules
+- Analyze the existing Krayden codebase to extract real product data structures and business rules
 - Define Zod schemas for all content types (products, categories, blog posts, pages)
 - Create sample/seed content for development (based on real data patterns from legacy codebase)
 - Structure the product taxonomy (categories → subcategories → products)
@@ -86,7 +86,7 @@ You design and implement the content data model, Content Collections, and conten
 
 ## Seed Content Guidelines
 - Create 10-15 sample products across at least 4 categories
-- Products should represent real CAPLINQ product types (thermal greases, die attach films, adhesives, etc.)
+- Products should represent real Krayden product types (thermal greases, die attach films, adhesives, etc.)
 - Include realistic specifications with proper units
 - Reference TDS/SDS documents (can be placeholder URLs)
-- Create full category tree mirroring real CAPLINQ taxonomy
+- Create full category tree mirroring real Krayden taxonomy

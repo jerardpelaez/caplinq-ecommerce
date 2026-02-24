@@ -1,4 +1,4 @@
-# CAPLINQ.com Comprehensive Site Analysis
+# Krayden.com Comprehensive Site Analysis
 
 **Date:** 2026-02-24
 **Source:** https://www.caplinq.com
@@ -24,7 +24,7 @@
 
 ## 1. Company Overview
 
-CAPLINQ (formerly known as CAPLINQ Corporation) is a B2B specialty chemicals and materials distributor headquartered in Europe (Netherlands), serving the electronics, semiconductor, and advanced manufacturing industries globally. The company positions itself as a "supply chain partner" offering both products and technical expertise.
+Krayden (formerly known as Krayden Corporation) is a B2B specialty chemicals and materials distributor headquartered in Europe (Netherlands), serving the electronics, semiconductor, and advanced manufacturing industries globally. The company positions itself as a "supply chain partner" offering both products and technical expertise.
 
 **Key differentiators:**
 - Specialty chemical distribution with deep technical knowledge
@@ -157,7 +157,7 @@ Resources / Blog
 └── Videos / Webinars
 
 About
-├── About CAPLINQ
+├── About Krayden
 ├── Our Team
 ├── Careers
 └── News
@@ -187,7 +187,7 @@ Home > Thermal Interface Materials > Thermal Greases > PolyGrease TG-500
 [Footer - Multi-column layout]
 
 Column 1: Products          Column 2: Company        Column 3: Support
-- Adhesives                 - About CAPLINQ          - Contact Us
+- Adhesives                 - About Krayden          - Contact Us
 - Thermal Materials         - Blog                   - Request a Quote
 - Encapsulants              - Careers                - Shipping Info
 - Conformal Coatings        - News                   - Returns
@@ -201,7 +201,7 @@ Column 4: Resources         Column 5: Connect
 - Blog                      - Newsletter Signup
 
 [Bottom Bar]
-  Copyright (C) CAPLINQ Corporation | Terms & Conditions | Privacy Policy | Sitemap
+  Copyright (C) Krayden Corporation | Terms & Conditions | Privacy Policy | Sitemap
 ```
 
 ---
@@ -249,9 +249,9 @@ Products are characterized by a rich set of technical attributes:
 
 ### 4.4 Brand/Supplier Relationships
 
-CAPLINQ distributes products from multiple manufacturers and also has its own branded product lines:
+Krayden distributes products from multiple manufacturers and also has its own branded product lines:
 
-- **CAPLINQ Branded:** PolyGrease, PolyPhen, PolyTherm, PolyCure series
+- **Krayden Branded:** PolyGrease, PolyPhen, PolyTherm, PolyCure series
 - **Third-party Brands:** Various specialty chemical manufacturers
 
 ---
@@ -414,7 +414,7 @@ CAPLINQ distributes products from multiple manufacturers and also has its own br
 
 ### 6.3 Cart / Quote System
 
-CAPLINQ uses a hybrid cart system that supports both direct purchasing and quote requests:
+Krayden uses a hybrid cart system that supports both direct purchasing and quote requests:
 
 - **Add to Cart** button on product pages
 - **Mini-cart** dropdown in header showing item count and summary
@@ -517,29 +517,29 @@ CAPLINQ uses a hybrid cart system that supports both direct purchasing and quote
 
 **Homepage:**
 ```html
-<title>CAPLINQ - Specialty Chemicals & Materials for Electronics</title>
-<meta name="description" content="CAPLINQ supplies specialty chemicals and
+<title>Krayden - Specialty Chemicals & Materials for Electronics</title>
+<meta name="description" content="Krayden supplies specialty chemicals and
 materials including thermal interface materials, adhesives, encapsulants,
 and conformal coatings for the electronics industry." />
 ```
 
 **Category Page:**
 ```html
-<title>[Category Name] | CAPLINQ</title>
-<meta name="description" content="Browse CAPLINQ's range of [category name]
+<title>[Category Name] | Krayden</title>
+<meta name="description" content="Browse Krayden's range of [category name]
 including [subcategory 1], [subcategory 2], and more. Request a quote today." />
 ```
 
 **Product Page:**
 ```html
-<title>[Product Name] - [Category] | CAPLINQ</title>
+<title>[Product Name] - [Category] | Krayden</title>
 <meta name="description" content="[Product Name] is a [brief description]
 with [key spec]. Available in [packaging]. Order online or request a quote." />
 ```
 
 **Blog Post:**
 ```html
-<title>[Blog Post Title] | CAPLINQ Blog</title>
+<title>[Blog Post Title] | Krayden Blog</title>
 <meta name="description" content="[First 150 chars of post or custom excerpt]" />
 ```
 

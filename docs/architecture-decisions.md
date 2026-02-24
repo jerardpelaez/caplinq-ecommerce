@@ -57,7 +57,7 @@
 **Status**: Accepted
 **Date**: 2024-11-15
 
-**Context**: CAPLINQ is a B2B supplier — customers don't pay online.
+**Context**: Krayden is a B2B supplier — customers don't pay online.
 
 **Decision**: Implement a "quote request" system instead of a traditional shopping cart + checkout.
 

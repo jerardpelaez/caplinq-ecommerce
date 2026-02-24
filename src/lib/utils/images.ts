@@ -1,5 +1,5 @@
 /**
- * Image optimization utilities for CAPLINQ B2B ecommerce.
+ * Image optimization utilities for Krayden B2B ecommerce.
  *
  * Provides responsive image sizing helpers and placeholder image
  * generation for products without uploaded images.
@@ -41,7 +41,7 @@ export const IMAGE_WIDTHS = [320, 640, 960, 1280] as const;
  * Get placeholder image URL for products without images.
  *
  * Returns the path to a lightweight SVG placeholder that uses
- * CAPLINQ brand colors and maintains the standard product
+ * Krayden brand colors and maintains the standard product
  * image aspect ratio (4:3).
  *
  * @param _productName - Product name (reserved for future per-product placeholders)
@@ -51,7 +51,7 @@ export function getPlaceholderImage(_productName: string): string {
   return '/images/placeholder-product.svg';
 }
 
-// CDN URL builders for Caplinq product images
+// CDN URL builders for Krayden product images (backend CDN URLs unchanged)
 const IMAGE_CDN_BASE = 'https://images.caplinq.com/';
 const CLOUDFLARE_CDN_BASE = 'https://www.caplinq.com/cdn-cgi/image/';
 

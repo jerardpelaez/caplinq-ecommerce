@@ -10,7 +10,7 @@ export interface QuoteItem {
 
 // Persist quote items in localStorage
 // Each key is a SKU, value is JSON-serialized QuoteItem
-export const quoteItems = persistentMap<Record<string, string>>('caplinq-quote:', {});
+export const quoteItems = persistentMap<Record<string, string>>('krayden-quote:', {});
 
 // Derived atom for item count
 export const quoteItemCount = atom(0);

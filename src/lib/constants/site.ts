@@ -1,9 +1,9 @@
 export const SITE = {
-  name: 'CAPLINQ',
-  tagline: 'Specialty Chemicals & Electronic Materials',
-  description: 'CAPLINQ is a specialty chemicals and electronic materials supplier serving the electronics, semiconductor, and industrial manufacturing industries.',
-  url: 'https://www.caplinq.com',
-  email: 'info@caplinq.com',
+  name: 'Krayden',
+  tagline: 'Products that Perform | Knowledge that Serves | Service that Delivers',
+  description: 'Krayden is a specialty chemicals and electronic materials supplier serving the electronics, semiconductor, and industrial manufacturing industries.',
+  url: 'https://www.krayden.com',
+  email: 'info@krayden.com',
 } as const;
 
 export const NAV_ITEMS = [

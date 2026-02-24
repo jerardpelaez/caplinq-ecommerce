@@ -35,18 +35,18 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SearchResultsPage',
   name: query ? `Search Results for "${query}"` : 'Search Products',
-  url: `https://www.caplinq.com/search/${query ? `?q=${encodeURIComponent(query)}` : ''}`,
+  url: `https://www.krayden.com/search/${query ? `?q=${encodeURIComponent(query)}` : ''}`,
   isPartOf: {
     '@type': 'WebSite',
-    name: 'CAPLINQ',
-    url: 'https://www.caplinq.com',
+    name: 'Krayden',
+    url: 'https://www.krayden.com',
   },
 };
 ---
 
 <PageLayout
   title={query ? `Search Results for "${query}"` : 'Search Products'}
-  description={query ? `Search results for "${query}" in CAPLINQ specialty chemicals and electronic materials catalog.` : 'Search CAPLINQ products, technical resources, and articles for specialty chemicals and electronic materials.'}
+  description={query ? `Search results for "${query}" in Krayden specialty chemicals and electronic materials catalog.` : 'Search Krayden products, technical resources, and articles for specialty chemicals and electronic materials.'}
   jsonLd={jsonLd}
 >
   <Breadcrumbs items={breadcrumbs} />

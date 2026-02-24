@@ -18,21 +18,21 @@ const categoryNameMap = new Map(allCategories.map((c) => [c.data.slug, c.data.na
 
 const pageTitle = 'Products';
 const pageDescription =
-  'Browse CAPLINQ specialty chemicals, thermal interface materials, adhesives, and engineering plastics for electronics manufacturing.';
+  'Browse Krayden specialty chemicals, thermal interface materials, adhesives, and engineering plastics for electronics manufacturing.';
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
-  name: 'CAPLINQ Products',
+  name: 'Krayden Products',
   description: pageDescription,
-  url: 'https://www.caplinq.com/products/',
+  url: 'https://www.krayden.com/products/',
   mainEntity: {
     '@type': 'ItemList',
     itemListElement: categoryTree.map((cat, index) => ({
       '@type': 'ListItem',
       position: index + 1,
       name: cat.name,
-      url: `https://www.caplinq.com/products/${cat.slug}/`,
+      url: `https://www.krayden.com/products/${cat.slug}/`,
     })),
   },
 };
@@ -54,7 +54,7 @@ const jsonLd = {
           Specialty Chemicals & Electronic Materials
         </h1>
         <p class="mt-4 text-lg text-gray-600 leading-relaxed">
-          Explore our comprehensive portfolio of high-performance materials engineered for electronics manufacturing, semiconductor packaging, and industrial applications. From thermal interface materials to specialty plastics, CAPLINQ delivers the materials that keep your products performing at their best.
+          Explore our comprehensive portfolio of high-performance materials engineered for electronics manufacturing, semiconductor packaging, and industrial applications. From thermal interface materials to specialty plastics, Krayden delivers the materials that keep your products performing at their best.
         </p>
       </div>
     </div>

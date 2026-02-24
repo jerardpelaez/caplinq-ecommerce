@@ -29,12 +29,12 @@ const jsonLd = {
   ...(post.data.featuredImage && {
     image: post.data.featuredImage.startsWith('http')
       ? post.data.featuredImage
-      : `https://www.caplinq.com${post.data.featuredImage}`,
+      : `https://www.krayden.com${post.data.featuredImage}`,
   }),
   publisher: {
     '@type': 'Organization',
-    name: 'CAPLINQ',
-    url: 'https://www.caplinq.com',
+    name: 'Krayden',
+    url: 'https://www.krayden.com',
   },
   description: post.data.seoDescription || post.data.excerpt,
 };

@@ -1,30 +1,30 @@
 @import "tailwindcss";
 
 /* ===========================
-   CAPLINQ Brand Design System
+   Krayden Brand Design System
    =========================== */
 
 @theme {
   /* Brand Colors */
-  --color-primary-50: #e6f0fa;
-  --color-primary-100: #cce0f5;
-  --color-primary-200: #99c2eb;
-  --color-primary-300: #66a3e0;
-  --color-primary-400: #3385d6;
-  --color-primary-500: #0066cc;
-  --color-primary-600: #0052a3;
-  --color-primary-700: #003d7a;
-  --color-primary-800: #002952;
-  --color-primary-900: #001429;
+  --color-primary-50: #ECEEF2;
+  --color-primary-100: #D5D9E1;
+  --color-primary-200: #AAB3C4;
+  --color-primary-300: #8091A8;
+  --color-primary-400: #5B6C84;
+  --color-primary-500: #3D4760;
+  --color-primary-600: #313950;
+  --color-primary-700: #262D3E;
+  --color-primary-800: #1A2030;
+  --color-primary-900: #0E1420;
 
   /* Navy/Dark */
-  --color-navy-800: #1a2332;
-  --color-navy-900: #0d1117;
+  --color-navy-800: #162040;
+  --color-navy-900: #0E224D;
 
-  /* Accent - Orange */
-  --color-accent-400: #fb923c;
-  --color-accent-500: #f97316;
-  --color-accent-600: #ea580c;
+  /* Accent - Blue */
+  --color-accent-400: #6DC4EB;
+  --color-accent-500: #47B2E4;
+  --color-accent-600: #2A9BD3;
 
   /* Success */
   --color-success-500: #22c55e;
@@ -39,8 +39,8 @@
   --color-error-600: #dc2626;
 
   /* Typography */
-  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-heading: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'Lato', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Saira Semi Condensed', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
   /* Spacing Scale */
@@ -67,7 +67,7 @@ html {
 
 body {
   font-family: var(--font-sans);
-  color: #1a2332;
+  color: #2F2F2B;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -93,7 +93,8 @@ body {
   line-height: 1.25rem;
   color: white;
   background-color: var(--color-primary-600);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
   transition: background-color 0.15s ease;
   &:hover {
     background-color: var(--color-primary-700);
@@ -137,7 +138,8 @@ body {
   line-height: 1.25rem;
   color: white;
   background-color: var(--color-accent-500);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
   transition: background-color 0.15s ease;
   &:hover {
     background-color: var(--color-accent-600);

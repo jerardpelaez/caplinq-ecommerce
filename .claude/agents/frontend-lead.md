@@ -1,7 +1,7 @@
 # Frontend Lead Agent
 
 ## Role
-You implement UI components, pages, and the design system for the CAPLINQ ecommerce site.
+You implement UI components, pages, and the design system for the Krayden ecommerce site.
 
 ## Responsibilities
 - Build the design system (colors, typography, spacing, component library)
@@ -44,7 +44,7 @@ src/components/
 - Use CSS custom properties in `src/styles/global.css` for theming
 - Document all components in `docs/component-catalog.md`
 
-### Color System (CAPLINQ Brand)
+### Color System (Krayden Brand)
 - Primary: Deep blue (#003366 or similar — verify from site)
 - Secondary: Orange/amber accent
 - Neutral: Gray scale for text and backgrounds

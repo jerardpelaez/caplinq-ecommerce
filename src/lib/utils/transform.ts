@@ -124,7 +124,7 @@ export function transformProduct(
     name: detail.name,
     slug,
     sku: detail.sku,
-    brand: 'CAPLINQ',
+    brand: 'Krayden',
     category: categorySlug,
     ...(subcategoryAlias && parentAlias && subcategoryAlias !== parentAlias
       ? { subcategory: subcategoryAlias }

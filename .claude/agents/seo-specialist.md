@@ -40,7 +40,7 @@ You optimize the site for search engines and Core Web Vitals performance.
   "description": "...",
   "sku": "...",
   "mpn": "...",
-  "brand": { "@type": "Brand", "name": "CAPLINQ" },
+  "brand": { "@type": "Brand", "name": "Krayden" },
   "category": "...",
   "image": "...",
   "offers": {
@@ -61,7 +61,7 @@ You optimize the site for search engines and Core Web Vitals performance.
 {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "CAPLINQ",
+  "name": "Krayden",
   "url": "https://www.caplinq.com",
   "logo": "...",
   "description": "Specialty chemicals and electronic materials supplier",

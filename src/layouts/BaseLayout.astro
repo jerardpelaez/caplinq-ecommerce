@@ -12,21 +12,21 @@ interface Props {
 
 const {
   title,
-  description = 'CAPLINQ — Specialty chemicals and electronic materials supplier. Thermal interface materials, adhesives, encapsulants, and more.',
-  ogImage = '/images/caplinq-og-default.jpg',
+  description = 'Krayden — Adhesives, sealants, and specialty chemicals distributor. Thermal interface materials, encapsulants, and more.',
+  ogImage = '/images/krayden-og-default.jpg',
   canonicalUrl,
   jsonLd,
 } = Astro.props;
 
-const siteTitle = title === 'Home' ? 'CAPLINQ — Specialty Chemicals & Electronic Materials' : `${title} | CAPLINQ`;
+const siteTitle = title === 'Home' ? 'Krayden — Adhesives, Sealants & Specialty Chemicals' : `${title} | Krayden`;
 const canonical = canonicalUrl || Astro.url.href;
 
 const orgJsonLd = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "CAPLINQ",
-  "url": "https://www.caplinq.com",
-  "description": "Specialty chemicals and electronic materials supplier",
+  "name": "Krayden",
+  "url": "https://www.krayden.com",
+  "description": "Adhesives, sealants, and specialty chemicals distributor",
   "contactPoint": {
     "@type": "ContactPoint",
     "contactType": "sales",
@@ -45,7 +45,7 @@ const pageJsonLd = jsonLd ? JSON.stringify(jsonLd) : null;
     <meta name="generator" content={Astro.generator} />
 
     <!-- Performance: theme color and color scheme for faster first paint -->
-    <meta name="theme-color" content="#0066cc" />
+    <meta name="theme-color" content="#3D4760" />
     <meta name="color-scheme" content="light" />
 
     <!-- SEO -->
@@ -60,7 +60,7 @@ const pageJsonLd = jsonLd ? JSON.stringify(jsonLd) : null;
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:site_name" content="CAPLINQ" />
+    <meta property="og:site_name" content="Krayden" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -81,6 +81,11 @@ const pageJsonLd = jsonLd ? JSON.stringify(jsonLd) : null;
     <script type="application/ld+json" is:inline set:html={orgJsonLd} />
 
     <ClientRouter />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Saira+Semi+Condensed:wght@500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body class="min-h-screen flex flex-col bg-white text-navy-900">
     <a href="#main-content" class="skip-link">Skip to main content</a>

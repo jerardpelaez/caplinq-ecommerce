@@ -1,7 +1,7 @@
 ---
 title: "Die Attach Materials for Modern Semiconductor Packaging"
 slug: "die-attach-materials-semiconductor-packaging"
-author: "CAPLINQ Technical Team"
+author: "Krayden Technical Team"
 publishDate: "2024-11-15"
 category: "Industry Insights"
 tags:
@@ -34,4 +34,4 @@ Reliability qualification of die attach materials follows well-established stand
 
 ## Selecting the Right Die Attach Material
 
-Choosing the optimal die attach material begins with a clear definition of the application requirements, including the maximum junction temperature, power dissipation, die size, substrate material, and the target reliability profile. For cost-sensitive consumer applications with moderate thermal requirements, silver-filled epoxy pastes or DAFs offer an excellent balance of performance, process compatibility, and supply chain availability. High-power applications such as automotive IGBT modules and industrial motor drives benefit from solder or sintered silver die attach, with the choice between the two driven primarily by the maximum operating temperature and the acceptable process complexity. CAPLINQ's LinqBond product portfolio includes both die attach films and die attach pastes engineered for a range of packaging platforms, from conventional lead frame packages to advanced fan-out and system-in-package designs. Our materials are designed to meet the stringent requirements of automotive and industrial end markets, and our technical team can support customers through material selection, process optimization, and reliability qualification.
+Choosing the optimal die attach material begins with a clear definition of the application requirements, including the maximum junction temperature, power dissipation, die size, substrate material, and the target reliability profile. For cost-sensitive consumer applications with moderate thermal requirements, silver-filled epoxy pastes or DAFs offer an excellent balance of performance, process compatibility, and supply chain availability. High-power applications such as automotive IGBT modules and industrial motor drives benefit from solder or sintered silver die attach, with the choice between the two driven primarily by the maximum operating temperature and the acceptable process complexity. Krayden's LinqBond product portfolio includes both die attach films and die attach pastes engineered for a range of packaging platforms, from conventional lead frame packages to advanced fan-out and system-in-package designs. Our materials are designed to meet the stringent requirements of automotive and industrial end markets, and our technical team can support customers through material selection, process optimization, and reliability qualification.

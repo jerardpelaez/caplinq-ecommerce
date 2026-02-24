@@ -1,4 +1,4 @@
-# CAPLINQ Legacy Codebase Analysis
+# Krayden Legacy Codebase Analysis
 
 > **Purpose**: Requirements document for full replacement of Joomla 3.5.x + VirtueMart PHP ecommerce site with Astro + Svelte.
 > **Generated from**: `/home/jerardpelaez/frontend-dev-workspace/website/`
