@@ -148,6 +148,19 @@ const productJsonLd = {
           </div>
 
           <p class="mt-6 text-lg text-gray-600 leading-relaxed">{data.shortDescription}</p>
+
+          {data.sellingPoints && data.sellingPoints.length > 0 && (
+            <ul class="mt-4 space-y-2">
+              {data.sellingPoints.map((point: string) => (
+                <li class="flex items-start gap-2 text-gray-600">
+                  <svg class="h-5 w-5 shrink-0 text-green-500 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                  {point}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <!-- Quote Action (1 col) -->
