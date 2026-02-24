@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krayden B2B Ecommerce — Developer Guide</title>
+<style>
+  /* ========== RESET & BASE ========== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary-50: #ECEEF2;
+    --primary-100: #D5D9E2;
+    --primary-200: #B0B7C6;
+    --primary-300: #8B95AA;
+    --primary-400: #66738E;
+    --primary-500: #3D4760;
+    --primary-600: #313A50;
+    --primary-700: #252D40;
+    --primary-800: #1A2030;
+    --primary-900: #0E1420;
+    --navy-800: #162040;
+    --navy-900: #0E224D;
+    --accent-400: #6DC4EB;
+    --accent-500: #47B2E4;
+    --accent-600: #2A9BD3;
+    --white: #ffffff;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+    --green-500: #22c55e;
+    --red-500: #ef4444;
+    --yellow-500: #eab308;
+    --code-bg: #1e293b;
+    --code-text: #e2e8f0;
+    --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'SF Mono', 'Cascadia Code', 'Fira Code', Consolas, monospace;
+    --font-heading: var(--font-sans);
+  }
+
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--gray-50);
+    color: var(--gray-800);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ========== MODE TOGGLE ========== */
+  .mode-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1000;
+    display: flex;
+    gap: 0.25rem;
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.5rem;
+    padding: 0.25rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .mode-toggle button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    background: transparent;
+    color: var(--gray-500);
+    transition: all 0.2s;
+  }
+  .mode-toggle button.active {
+    background: var(--primary-500);
+    color: var(--white);
+  }
+  .mode-toggle button:hover:not(.active) {
+    background: var(--gray-100);
+    color: var(--gray-700);
+  }
+
+  /* ========== PROGRESS BAR (presentation mode) ========== */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: var(--accent-500);
+    z-index: 999;
+    transition: width 0.3s ease;
+  }
+
+  /* ========== SLIDE COUNTER ========== */
+  .slide-counter {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 999;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--gray-400);
+    font-family: var(--font-mono);
+  }
+
+  /* ========== NAV HINTS ========== */
+  .nav-hint {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    z-index: 999;
+    font-size: 0.75rem;
+    color: var(--gray-400);
+  }
+  .nav-hint kbd {
+    display: inline-block;
+    padding: 0.125rem 0.375rem;
+    font-size: 0.6875rem;
+    font-family: var(--font-mono);
+    border: 1px solid var(--gray-300);
+    border-radius: 0.25rem;
+    background: var(--white);
+    margin: 0 0.125rem;
+  }
+
+  /* ========== PRESENTATION MODE ========== */
+  body.presentation-mode {
+    overflow: hidden;
+  }
+  body.presentation-mode .slides-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+  body.presentation-mode .slide {
+    min-height: 100vh;
+    max-height: 100vh;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 6rem;
+    overflow-y: auto;
+  }
+  body.presentation-mode .slide.active {
+    display: flex;
+  }
+  body.presentation-mode .reference-sidebar { display: none; }
+
+  /* ========== REFERENCE MODE ========== */
+  body.reference-mode .slides-container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem 2rem 4rem 2rem;
+  }
+  body.reference-mode .reference-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100vh;
+    background: var(--white);
+    border-right: 1px solid var(--gray-200);
+    overflow-y: auto;
+    padding: 1.5rem 0;
+    z-index: 100;
+  }
+  body.reference-mode .slides-container {
+    margin-left: 260px;
+  }
+  body.reference-mode .slide {
+    padding: 3rem 0;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  body.reference-mode .slide:last-child { border-bottom: none; }
+  body.reference-mode .progress-bar,
+  body.reference-mode .slide-counter,
+  body.reference-mode .nav-hint { display: none; }
+
+  /* ========== SIDEBAR NAV ========== */
+  .sidebar-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--primary-500);
+    padding: 0 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .sidebar-nav a {
+    display: block;
+    padding: 0.375rem 1.25rem;
+    font-size: 0.8125rem;
+    color: var(--gray-600);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+    line-height: 1.4;
+  }
+  .sidebar-nav a:hover {
+    color: var(--primary-600);
+    background: var(--gray-50);
+  }
+  .sidebar-nav a.active {
+    color: var(--primary-600);
+    border-left-color: var(--accent-500);
+    background: var(--primary-50);
+    font-weight: 600;
+  }
+
+  /* ========== TYPOGRAPHY ========== */
+  .slide h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--primary-800);
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+  .slide h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary-700);
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+  }
+  .slide h3 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--primary-600);
+    margin-bottom: 0.5rem;
+    margin-top: 1.5rem;
+  }
+  .slide p {
+    font-size: 1rem;
+    color: var(--gray-600);
+    margin-bottom: 0.75rem;
+    max-width: 72ch;
+  }
+  .slide .subtitle {
+    font-size: 1.25rem;
+    color: var(--gray-500);
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+  }
+  .slide .label {
+    display: inline-block;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-500);
+    margin-bottom: 0.5rem;
+  }
+
+  /* ========== CODE BLOCKS ========== */
+  pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    border-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+    font-size: 0.8125rem;
+    line-height: 1.65;
+    margin: 0.75rem 0;
+    font-family: var(--font-mono);
+    border: 1px solid var(--gray-700);
+  }
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    background: var(--gray-100);
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    color: var(--primary-600);
+  }
+  pre code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    color: inherit;
+    font-size: inherit;
+  }
+  .code-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--gray-400);
+    font-family: var(--font-mono);
+    margin-bottom: 0.25rem;
+  }
+
+  /* Syntax highlighting colors */
+  .kw { color: #c792ea; }
+  .fn { color: #82aaff; }
+  .str { color: #c3e88d; }
+  .cmt { color: #546e7a; font-style: italic; }
+  .typ { color: #ffcb6b; }
+  .num { color: #f78c6c; }
+  .tag { color: #f07178; }
+  .attr { color: #c792ea; }
+  .val { color: #c3e88d; }
+  .punct { color: #89ddff; }
+
+  /* ========== TABLES ========== */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    margin: 0.75rem 0;
+  }
+  th {
+    text-align: left;
+    padding: 0.625rem 1rem;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--primary-500);
+    background: var(--primary-50);
+    border-bottom: 2px solid var(--primary-200);
+  }
+  td {
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--gray-200);
+    color: var(--gray-700);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+
+  /* ========== LISTS ========== */
+  .slide ul, .slide ol {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+  }
+  .slide li {
+    margin-bottom: 0.375rem;
+    color: var(--gray-600);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+  .slide li strong {
+    color: var(--gray-800);
+  }
+
+  /* ========== CARDS & BOXES ========== */
+  .info-box {
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+    margin: 0.75rem 0;
+  }
+  .info-box.warn {
+    background: #fef3c7;
+    border-color: #fde68a;
+  }
+  .info-box.tip {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+  }
+  .info-box.important {
+    background: #fef2f2;
+    border-color: #fecaca;
+  }
+  .info-box-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.375rem;
+  }
+  .info-box.warn .info-box-title { color: #92400e; }
+  .info-box.tip .info-box-title { color: #065f46; }
+  .info-box.important .info-box-title { color: #991b1b; }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1rem 0;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+
+  .stat-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+    text-align: center;
+  }
+  .stat-card .stat-value {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--primary-600);
+  }
+  .stat-card .stat-label {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    margin-top: 0.25rem;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+  }
+  .badge-green { background: #dcfce7; color: #166534; }
+  .badge-red { background: #fee2e2; color: #991b1b; }
+  .badge-blue { background: #dbeafe; color: #1e40af; }
+  .badge-yellow { background: #fef9c3; color: #854d0e; }
+  .badge-gray { background: var(--gray-100); color: var(--gray-600); }
+
+  .pro { color: #16a34a; font-weight: 600; }
+  .con { color: #dc2626; font-weight: 600; }
+  .neutral { color: var(--gray-500); font-weight: 600; }
+
+  /* ========== TITLE SLIDE SPECIAL ========== */
+  .title-slide {
+    background: linear-gradient(135deg, var(--primary-800) 0%, var(--navy-900) 100%);
+    text-align: center;
+  }
+  .title-slide h1 {
+    color: var(--white);
+    font-size: 3rem;
+    margin-bottom: 0.75rem;
+  }
+  .title-slide .subtitle {
+    color: var(--accent-400);
+    font-size: 1.25rem;
+  }
+  .title-slide .meta {
+    color: var(--gray-400);
+    font-size: 0.875rem;
+    margin-top: 2rem;
+  }
+
+  /* ========== FLOW DIAGRAM ========== */
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+  }
+  .flow-step {
+    background: var(--white);
+    border: 2px solid var(--primary-200);
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--primary-600);
+    white-space: nowrap;
+  }
+  .flow-step.active {
+    background: var(--primary-500);
+    border-color: var(--primary-500);
+    color: var(--white);
+  }
+  .flow-arrow {
+    color: var(--gray-300);
+    font-size: 1.25rem;
+  }
+
+  /* ========== TREE DIAGRAM ========== */
+  .tree {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    line-height: 1.7;
+    color: var(--gray-600);
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+    margin: 0.75rem 0;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .tree .folder { color: var(--accent-600); font-weight: 600; }
+  .tree .file { color: var(--gray-500); }
+  .tree .comment { color: var(--gray-400); font-style: italic; }
+
+  /* ========== COMPARISON COLUMNS ========== */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1rem 0;
+  }
+  .compare-col {
+    background: var(--white);
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+    border: 1px solid var(--gray-200);
+  }
+  .compare-col h3 {
+    margin-top: 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--gray-200);
+  }
+  .compare-col.old h3 { border-bottom-color: var(--red-500); }
+  .compare-col.new h3 { border-bottom-color: var(--green-500); }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 768px) {
+    body.presentation-mode .slide { padding: 2rem 1.5rem; }
+    .slide h1 { font-size: 1.75rem; }
+    .slide h2 { font-size: 1.375rem; }
+    .grid-2, .grid-3, .compare { grid-template-columns: 1fr; }
+    body.reference-mode .reference-sidebar { display: none; }
+    body.reference-mode .slides-container { margin-left: 0; }
+  }
+
+  /* ========== DECISION TREE ========== */
+  .decision-tree {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+    margin: 0.75rem 0;
+  }
+  .decision-tree .node {
+    padding: 0.375rem 0;
+    padding-left: 1.5rem;
+    border-left: 2px solid var(--gray-200);
+    margin-left: 0.75rem;
+    font-size: 0.875rem;
+  }
+  .decision-tree .question {
+    font-weight: 700;
+    color: var(--primary-600);
+    padding-left: 0;
+    border: none;
+    margin-left: 0;
+    margin-bottom: 0.25rem;
+  }
+  .decision-tree .answer {
+    color: var(--gray-600);
+  }
+  .decision-tree .answer::before {
+    content: "→ ";
+    color: var(--accent-500);
+    font-weight: 700;
+  }
+  .decision-tree .result {
+    font-weight: 600;
+    color: var(--accent-600);
+  }
+</style>
+</head>
+<body class="presentation-mode">
+
+<!-- Mode Toggle -->
+<div class="mode-toggle">
+  <button id="btn-present" class="active" onclick="setMode('presentation')">Slides</button>
+  <button id="btn-reference" onclick="setMode('reference')">Reference</button>
+</div>
+
+<!-- Progress Bar -->
+<div class="progress-bar" id="progress-bar"></div>
+
+<!-- Slide Counter -->
+<div class="slide-counter" id="slide-counter"></div>
+
+<!-- Nav Hint -->
+<div class="nav-hint">
+  <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&middot;&nbsp; <kbd>Esc</kbd> toggle mode
+</div>
+
+<!-- Reference Sidebar -->
+<nav class="reference-sidebar" id="sidebar">
+  <div class="sidebar-title">Developer Guide</div>
+  <div class="sidebar-nav" id="sidebar-nav"></div>
+</nav>
+
+<!-- ==================== SLIDES ==================== -->
+<div class="slides-container" id="slides-container">
+
+<!-- SLIDE 1: Title -->
+<section class="slide title-slide" id="slide-title" data-title="Introduction">
+  <div>
+    <div class="label" style="color: var(--accent-400);">Developer docs</div>
+    <h1>Krayden B2B Ecommerce</h1>
+    <p class="subtitle">Built with Astro 5 + Svelte 5 + Tailwind CSS v4</p>
+    <p class="meta">Migrated from Joomla 3.5 + VirtueMart &nbsp;&middot;&nbsp; 1,081 products &nbsp;&middot;&nbsp; 44 pages</p>
+  </div>
+</section>
+
+<!-- SLIDE 2: Why We Moved -->
+<section class="slide" id="slide-why" data-title="Why We Moved">
+  <div class="label">Context</div>
+  <h2>Why We Moved from Joomla</h2>
+  <div class="compare">
+    <div class="compare-col old">
+      <h3>The Old Stack</h3>
+      <ul>
+        <li><strong>Joomla 3.5.x</strong> &mdash; end-of-life, no security patches</li>
+        <li><strong>VirtueMart</strong> &mdash; heavily customized fork, can't update</li>
+        <li><strong>Separate WordPress</strong> for blog (2 CMS to maintain)</li>
+        <li><strong>Custom PHP SDK</strong> &mdash; 33 API endpoints to a .NET backend</li>
+        <li><strong>External image server</strong> because Joomla couldn't handle it</li>
+        <li>PHP version lock-in, aging plugin ecosystem</li>
+      </ul>
+    </div>
+    <div class="compare-col new">
+      <h3>What We Needed</h3>
+      <ul>
+        <li>Modern, maintainable codebase with types</li>
+        <li>Fast page loads (95+ Lighthouse)</li>
+        <li>SEO-first for 1,000+ product pages</li>
+        <li>Content versioned in git, not a database</li>
+        <li>Single unified platform (no dual-CMS)</li>
+        <li>Developer experience that attracts talent</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-box">
+    <p style="margin:0; font-size:0.875rem;">The legacy codebase analysis conclusion: <strong>&ldquo;Requirements document written in bad code &mdash; extract knowledge, discard implementation.&rdquo;</strong></p>
+  </div>
+</section>
+
+<!-- SLIDE 3: The New Stack -->
+<section class="slide" id="slide-stack" data-title="The New Stack">
+  <div class="label">Technology</div>
+  <h2>The New Stack</h2>
+  <div class="grid-3">
+    <div class="stat-card">
+      <div class="stat-value" style="font-size: 1.25rem;">Astro 5</div>
+      <div class="stat-label">Static-first meta-framework<br>HTML output, zero JS by default</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="font-size: 1.25rem;">Svelte 5</div>
+      <div class="stat-label">Interactive UI islands<br>Runes API ($state, $derived, $effect)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="font-size: 1.25rem;">Tailwind v4</div>
+      <div class="stat-label">CSS-first utility framework<br>Design tokens via @theme</div>
+    </div>
+  </div>
+  <h3>Supporting Tools</h3>
+  <table>
+    <tr><td><strong>Nanostores</strong></td><td>Cross-component state (quote cart, search)</td></tr>
+    <tr><td><strong>Fuse.js</strong></td><td>Client-side fuzzy search across 1,081 products</td></tr>
+    <tr><td><strong>Zod</strong></td><td>Schema validation for content collections &amp; forms</td></tr>
+    <tr><td><strong>Content Collections</strong></td><td>Type-safe content layer with Markdown/YAML files</td></tr>
+  </table>
+</section>
+
+<!-- SLIDE 4: Pros & Cons -->
+<section class="slide" id="slide-proscons" data-title="Pros & Cons">
+  <div class="label">Honest Assessment</div>
+  <h2>Pros &amp; Cons vs. Joomla/PHP</h2>
+  <table>
+    <thead>
+      <tr><th>Dimension</th><th>Verdict</th><th>Details</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Performance</td><td><span class="pro">+ Win</span></td><td>Static HTML on CDN vs PHP rendered per request. 95+ Lighthouse, ~29KB JS.</td></tr>
+      <tr><td>SEO</td><td><span class="pro">+ Win</span></td><td>Pre-rendered HTML, JSON-LD on every page, crawlers see full content instantly.</td></tr>
+      <tr><td>Security</td><td><span class="pro">+ Win</span></td><td>No PHP runtime, no MySQL, no admin panel. Tiny attack surface.</td></tr>
+      <tr><td>Type Safety</td><td><span class="pro">+ Win</span></td><td>TypeScript + Zod throughout. Malformed content breaks the build, not prod.</td></tr>
+      <tr><td>Hosting Cost</td><td><span class="pro">+ Win</span></td><td>Static files on CDN. No PHP/MySQL server required.</td></tr>
+      <tr><td>Content Editing</td><td><span class="con">&minus; Tradeoff</span></td><td>No admin UI. Editors need git or a headless CMS (future addition).</td></tr>
+      <tr><td>Build Step</td><td><span class="con">&minus; Tradeoff</span></td><td>Every change needs <code>npm run build</code>. CI/CD pipeline is required.</td></tr>
+      <tr><td>Learning Curve</td><td><span class="con">&minus; Tradeoff</span></td><td>New frameworks for the team. Svelte 5 Runes are different from everything.</td></tr>
+      <tr><td>Content Updates</td><td><span class="neutral">~ Neutral</span></td><td>Rebuild takes minutes. Not instant like Joomla, but versioned in git.</td></tr>
+      <tr><td>Component Ecosystem</td><td><span class="neutral">~ Neutral</span></td><td>Svelte ecosystem smaller than React. npm compensates.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- SLIDE 5: Architecture Overview -->
+<section class="slide" id="slide-arch" data-title="Architecture">
+  <div class="label">Architecture</div>
+  <h2>Islands Architecture</h2>
+  <p>Astro renders everything as static HTML. Svelte components are &ldquo;islands&rdquo; of interactivity that hydrate independently.</p>
+  <div class="flow">
+    <div class="flow-step">.astro files</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">Static HTML</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">CDN</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step active">Zero JS by default</div>
+  </div>
+  <div class="flow">
+    <div class="flow-step">.svelte files</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">Interactive Islands</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step active">JS only where needed</div>
+  </div>
+  <div class="info-box tip">
+    <div class="info-box-title">Key Insight</div>
+    <p style="margin:0;font-size:0.875rem;">A product page ships as pure HTML. Only the &ldquo;Add to Quote&rdquo; button and image gallery load JavaScript. The product description, specs, documents &mdash; all static HTML with zero JS cost.</p>
+  </div>
+  <h3>For PHP Developers</h3>
+  <p>Think of it this way: In Joomla, the server runs PHP on every request to generate HTML. In Astro, <code>npm run build</code> runs once and produces all 44 pages as HTML files. A page request just serves a file &mdash; no code executes.</p>
+</section>
+
+<!-- SLIDE 6: Project Structure -->
+<section class="slide" id="slide-structure" data-title="Project Structure">
+  <div class="label">Navigation</div>
+  <h2>Project Structure</h2>
+  <div class="grid-2">
+    <div>
+      <div class="tree"><span class="folder">src/</span>
+├── <span class="folder">components/</span>
+│   ├── <span class="folder">ui/</span>         <span class="comment">Button, Card, Badge, Input</span>
+│   ├── <span class="folder">layout/</span>     <span class="comment">Breadcrumbs, MobileMenu</span>
+│   ├── <span class="folder">product/</span>    <span class="comment">ProductCard, AddToQuote, ImageGallery</span>
+│   ├── <span class="folder">cart/</span>       <span class="comment">QuoteDrawer</span>
+│   ├── <span class="folder">search/</span>     <span class="comment">SearchBar</span>
+│   ├── <span class="folder">forms/</span>      <span class="comment">ContactForm, QuoteRequestForm</span>
+│   └── <span class="folder">content/</span>    <span class="comment">BlogCard</span>
+├── <span class="folder">content/</span>        <span class="comment">1081 products, 60+ categories, 3 blogs</span>
+├── <span class="folder">layouts/</span>        <span class="comment">Base, Page, Blog, Product</span>
+├── <span class="folder">lib/</span>
+│   ├── <span class="folder">stores/</span>     <span class="comment">cart.ts, search.ts (nanostores)</span>
+│   ├── <span class="folder">types/</span>      <span class="comment">product.ts, forms.ts (Zod)</span>
+│   └── <span class="folder">utils/</span>      <span class="comment">categories, images, nanostores bridge</span>
+├── <span class="folder">pages/</span>          <span class="comment">File-based routing</span>
+└── <span class="folder">styles/</span>         <span class="comment">global.css (Tailwind v4 + tokens)</span></div>
+    </div>
+    <div>
+      <h3>Decision Rule</h3>
+      <div class="decision-tree">
+        <div class="question">Does it need interactivity?</div>
+        <div class="node">
+          <div class="answer"><strong>No</strong> &rarr; use <code>.astro</code></div>
+          <div class="answer"><strong>Yes</strong> &rarr; use <code>.svelte</code></div>
+        </div>
+        <div class="question" style="margin-top:0.75rem;">Does it need browser APIs?</div>
+        <div class="node">
+          <div class="answer"><strong>localStorage</strong> &rarr; <code>client:only="svelte"</code></div>
+          <div class="answer"><strong>Above fold</strong> &rarr; <code>client:idle</code></div>
+          <div class="answer"><strong>Below fold</strong> &rarr; <code>client:visible</code></div>
+        </div>
+        <div class="question" style="margin-top:0.75rem;">Does it need shared state?</div>
+        <div class="node">
+          <div class="answer"><strong>Yes</strong> &rarr; use <strong>nanostores</strong></div>
+          <div class="answer"><strong>No</strong> &rarr; local <code>$state</code></div>
+        </div>
+      </div>
+      <div class="info-box warn">
+        <div class="info-box-title">Rule</div>
+        <p style="margin:0;font-size:0.8125rem;"><code>getCollection()</code> can only be called in <code>.astro</code> files. Pass serializable data as props to Svelte.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 7: Astro Basics -->
+<section class="slide" id="slide-astro" data-title="Astro Basics">
+  <div class="label">Framework</div>
+  <h2>Astro Basics</h2>
+  <p>An <code>.astro</code> file has two parts: a frontmatter block (runs at build time in Node.js) and a template (outputs HTML).</p>
+  <div class="grid-2">
+    <div>
+      <div class="code-label">src/components/ui/Button.astro</div>
+      <pre><code><span class="cmt">---</span>
+<span class="kw">interface</span> <span class="typ">Props</span> {
+  variant<span class="punct">?:</span> <span class="str">'primary'</span> | <span class="str">'secondary'</span> | <span class="str">'accent'</span>;
+  size<span class="punct">?:</span> <span class="str">'sm'</span> | <span class="str">'md'</span> | <span class="str">'lg'</span>;
+  href<span class="punct">?:</span> <span class="typ">string</span>;
+}
+<span class="kw">const</span> { variant = <span class="str">'primary'</span>, size = <span class="str">'md'</span>, href } = Astro.props;
+<span class="cmt">---</span>
+
+{href <span class="punct">?</span>
+  <span class="punct">&lt;</span><span class="tag">a</span> <span class="attr">href</span>=<span class="val">{href}</span> <span class="attr">class</span>=<span class="val">{classes}</span><span class="punct">&gt;</span><span class="punct">&lt;</span><span class="tag">slot</span> /<span class="punct">&gt;</span><span class="punct">&lt;/</span><span class="tag">a</span><span class="punct">&gt;</span> <span class="punct">:</span>
+  <span class="punct">&lt;</span><span class="tag">button</span> <span class="attr">class</span>=<span class="val">{classes}</span><span class="punct">&gt;</span><span class="punct">&lt;</span><span class="tag">slot</span> /<span class="punct">&gt;</span><span class="punct">&lt;/</span><span class="tag">button</span><span class="punct">&gt;</span>
+}</code></pre>
+    </div>
+    <div>
+      <h3>For PHP Developers</h3>
+      <table>
+        <tr><td>PHP <code>&lt;?php ?&gt;</code></td><td>Astro <code>---</code> frontmatter</td></tr>
+        <tr><td>Runs on every request</td><td>Runs once at build time</td></tr>
+        <tr><td><code>include()</code></td><td><code>import Component</code></td></tr>
+        <tr><td><code>&lt;?= $var ?&gt;</code></td><td><code>{variable}</code></td></tr>
+        <tr><td>PHP sessions</td><td>No server state (static)</td></tr>
+      </table>
+      <div class="info-box important">
+        <div class="info-box-title">Critical Difference</div>
+        <p style="margin:0;font-size:0.8125rem;">The <code>---</code> block runs in <strong>Node.js</strong>, not in the browser. You cannot use <code>window</code>, <code>document</code>, or <code>localStorage</code> here.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 8: Content Collections -->
+<section class="slide" id="slide-content" data-title="Content Collections">
+  <div class="label">Data Layer</div>
+  <h2>Content Collections</h2>
+  <p>Products, categories, and blog posts are stored as Markdown/YAML files with Zod-validated frontmatter. Type-safe at build time.</p>
+  <div class="grid-2">
+    <div>
+      <div class="code-label">src/content.config.ts (simplified)</div>
+      <pre><code><span class="kw">const</span> products = <span class="fn">defineCollection</span>({
+  <span class="attr">loader</span>: <span class="fn">glob</span>({ pattern: <span class="str">'**/*.md'</span>,
+            base: <span class="str">'./src/content/products'</span> }),
+  <span class="attr">schema</span>: z.<span class="fn">object</span>({
+    name: z.<span class="fn">string</span>(),
+    slug: z.<span class="fn">string</span>(),
+    sku: z.<span class="fn">string</span>(),
+    category: z.<span class="fn">string</span>(),
+    status: z.<span class="fn">enum</span>([<span class="str">'active'</span>, <span class="str">'discontinued'</span>]),
+    specifications: z.<span class="fn">record</span>(z.<span class="fn">string</span>()),
+    documents: z.<span class="fn">array</span>(documentSchema),
+    featured: z.<span class="fn">boolean</span>().<span class="fn">default</span>(<span class="num">false</span>),
+  }),
+});</code></pre>
+    </div>
+    <div>
+      <div class="code-label">src/content/products/16-1lv.md</div>
+      <pre><code><span class="cmt">---</span>
+<span class="attr">name</span>: <span class="str">LOCTITE ABLESTIK 16-1LV</span>
+<span class="attr">slug</span>: <span class="str">16-1lv</span>
+<span class="attr">sku</span>: <span class="str">16-1LV</span>
+<span class="attr">category</span>: <span class="str">electrically-conductive-adhesives</span>
+<span class="attr">specifications</span>:
+  Work life @25C: <span class="str">2 hours</span>
+  Volume Resistivity: <span class="str">0.005 Ohms-cm</span>
+<span class="attr">status</span>: <span class="str">active</span>
+<span class="cmt">---</span>
+Markdown body for product description...</code></pre>
+      <div class="info-box tip">
+        <div class="info-box-title">Why This Matters</div>
+        <p style="margin:0;font-size:0.8125rem;">If a product file has a typo in <code>status</code> (e.g. <code>"activ"</code>), the build fails with a clear Zod error. Bad data never reaches production.</p>
+      </div>
+    </div>
+  </div>
+  <p><strong>1,081 product files</strong> are generated by <code>scripts/sync-catalog.ts</code>, which fetches from the Caplinq API, transforms the data, and writes Markdown files with validated frontmatter.</p>
+</section>
+
+<!-- SLIDE 9: Routing -->
+<section class="slide" id="slide-routing" data-title="Routing">
+  <div class="label">Navigation</div>
+  <h2>File-Based Routing</h2>
+  <p>The filesystem IS the router. Every <code>.astro</code> file in <code>src/pages/</code> becomes a URL.</p>
+  <div class="grid-2">
+    <div>
+      <table>
+        <thead><tr><th>File</th><th>URL</th></tr></thead>
+        <tbody>
+          <tr><td><code>pages/index.astro</code></td><td><code>/</code></td></tr>
+          <tr><td><code>pages/about.astro</code></td><td><code>/about</code></td></tr>
+          <tr><td><code>pages/products/index.astro</code></td><td><code>/products/</code></td></tr>
+          <tr><td><code>pages/products/[category]/index.astro</code></td><td><code>/products/adhesives/</code></td></tr>
+          <tr><td><code>pages/products/[category]/[slug].astro</code></td><td><code>/products/adhesives/16-1lv/</code></td></tr>
+          <tr><td><code>pages/blog/[slug].astro</code></td><td><code>/blog/my-post/</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="code-label">Dynamic route: getStaticPaths()</div>
+      <pre><code><span class="kw">export async function</span> <span class="fn">getStaticPaths</span>() {
+  <span class="kw">const</span> products = <span class="kw">await</span> <span class="fn">getCollection</span>(<span class="str">'products'</span>);
+
+  <span class="kw">return</span> products.<span class="fn">map</span>((p) => ({
+    <span class="attr">params</span>: {
+      category: p.data.category,
+      slug: p.data.slug,
+    },
+    <span class="attr">props</span>: { product: p },
+  }));
+}</code></pre>
+      <p style="font-size:0.8125rem;">Astro calls this <strong>once at build time</strong> to discover every valid URL. Each product becomes one HTML file.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 10: Svelte 5 Basics -->
+<section class="slide" id="slide-svelte" data-title="Svelte 5 Runes">
+  <div class="label">Framework</div>
+  <h2>Svelte 5 Runes &mdash; The Four You Must Know</h2>
+  <table>
+    <thead><tr><th>Rune</th><th>Purpose</th><th>React Equivalent</th><th>Vue Equivalent</th></tr></thead>
+    <tbody>
+      <tr><td><code>$props()</code></td><td>Receive props from parent</td><td>function params</td><td><code>defineProps()</code></td></tr>
+      <tr><td><code>$state()</code></td><td>Local reactive state</td><td><code>useState()</code></td><td><code>ref()</code></td></tr>
+      <tr><td><code>$derived()</code></td><td>Computed values</td><td><code>useMemo()</code></td><td><code>computed()</code></td></tr>
+      <tr><td><code>$effect()</code></td><td>Side effects + cleanup</td><td><code>useEffect()</code></td><td><code>watchEffect()</code></td></tr>
+    </tbody>
+  </table>
+  <div class="grid-2">
+    <div>
+      <div class="code-label">src/components/product/AddToQuote.svelte</div>
+      <pre><code><span class="punct">&lt;</span><span class="tag">script</span> <span class="attr">lang</span>=<span class="val">"ts"</span><span class="punct">&gt;</span>
+  <span class="kw">let</span> { sku, name }: Props = <span class="fn">$props</span>();
+  <span class="kw">let</span> quantity = <span class="fn">$state</span>(<span class="num">1</span>);
+  <span class="kw">let</span> showSuccess = <span class="fn">$state</span>(<span class="num">false</span>);
+<span class="punct">&lt;/</span><span class="tag">script</span><span class="punct">&gt;</span>
+
+<span class="punct">&lt;</span><span class="tag">button</span> <span class="attr">onclick</span>=<span class="val">{handleAdd}</span><span class="punct">&gt;</span>
+  Add to Quote
+<span class="punct">&lt;/</span><span class="tag">button</span><span class="punct">&gt;</span></code></pre>
+    </div>
+    <div>
+      <div class="info-box important">
+        <div class="info-box-title">Never Use These (Svelte 4)</div>
+        <p style="margin:0;font-size:0.8125rem;">
+          <code>export let</code> &rarr; use <code>$props()</code><br>
+          <code>$: value = expr</code> &rarr; use <code>$derived(expr)</code><br>
+          <code>on:click</code> &rarr; use <code>onclick</code><br>
+          <code>import { writable }</code> &rarr; use nanostores
+        </p>
+      </div>
+      <div class="info-box tip">
+        <div class="info-box-title">For PHP Devs</div>
+        <p style="margin:0;font-size:0.8125rem;"><code>$state</code> is like a variable that auto-updates the HTML when you change it. No need to manually touch the DOM &mdash; just assign a new value.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 11: Components -->
+<section class="slide" id="slide-components" data-title="Components">
+  <div class="label">Patterns</div>
+  <h2>Astro vs Svelte Components</h2>
+  <div class="grid-2">
+    <div>
+      <h3>Astro Components (.astro)</h3>
+      <p><strong>Use for:</strong> static content with no interactivity</p>
+      <ul>
+        <li><strong>ProductCard</strong> &mdash; displays product info, links</li>
+        <li><strong>Breadcrumbs</strong> &mdash; navigation + JSON-LD</li>
+        <li><strong>BlogCard</strong> &mdash; blog listing cards</li>
+        <li><strong>Button, Card, Badge</strong> &mdash; UI primitives</li>
+        <li><strong>Layouts</strong> &mdash; page shells, headers, footers</li>
+      </ul>
+      <p style="font-size:0.8125rem;">These output <strong>zero JavaScript</strong>. They render at build time and ship as pure HTML + CSS.</p>
+    </div>
+    <div>
+      <h3>Svelte Components (.svelte)</h3>
+      <p><strong>Use for:</strong> anything the user clicks, types, or toggles</p>
+      <ul>
+        <li><strong>SearchBar</strong> &mdash; fuzzy search with Fuse.js</li>
+        <li><strong>QuoteDrawer</strong> &mdash; slide-out cart panel</li>
+        <li><strong>AddToQuote</strong> &mdash; quantity input + add button</li>
+        <li><strong>ImageGallery</strong> &mdash; thumbnail navigation</li>
+        <li><strong>ContactForm</strong> &mdash; validated form with Zod</li>
+        <li><strong>MobileMenu</strong> &mdash; hamburger menu</li>
+      </ul>
+      <p style="font-size:0.8125rem;">These are <strong>islands</strong> &mdash; they load JS only when needed via hydration directives.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 12: Hydration Directives -->
+<section class="slide" id="slide-islands" data-title="Hydration Directives">
+  <div class="label">Performance</div>
+  <h2>Hydration Directives</h2>
+  <p>How and when Svelte islands receive their JavaScript.</p>
+  <table>
+    <thead><tr><th>Directive</th><th>When JS Loads</th><th>Used For</th></tr></thead>
+    <tbody>
+      <tr><td><code>client:idle</code></td><td>After browser is idle</td><td>SearchBar, MobileMenu, AddToQuote</td></tr>
+      <tr><td><code>client:visible</code></td><td>When element scrolls into view</td><td>ImageGallery</td></tr>
+      <tr><td><code>client:only="svelte"</code></td><td>Client only (no SSR)</td><td>QuoteDrawer, QuoteRequestForm</td></tr>
+      <tr><td><code>client:load</code></td><td>Immediately on page load</td><td>Not used (too aggressive)</td></tr>
+      <tr><td><em>No directive</em></td><td>Never &mdash; static HTML only</td><td>ProductCard, Breadcrumbs, Badge</td></tr>
+    </tbody>
+  </table>
+  <div class="code-label">src/layouts/PageLayout.astro</div>
+  <pre><code><span class="punct">&lt;</span><span class="tag">SearchBar</span> <span class="attr">products</span>=<span class="val">{searchProducts}</span> <span class="attr">client:idle</span> <span class="punct">/&gt;</span>
+<span class="punct">&lt;</span><span class="tag">QuoteDrawer</span> <span class="attr">client:only</span>=<span class="val">"svelte"</span> <span class="punct">/&gt;</span>     <span class="cmt">&lt;!-- needs localStorage --&gt;</span>
+<span class="punct">&lt;</span><span class="tag">MobileMenu</span> <span class="attr">navItems</span>=<span class="val">{navItems}</span> <span class="attr">client:idle</span> <span class="punct">/&gt;</span></code></pre>
+  <div class="info-box warn">
+    <div class="info-box-title">Why client:only?</div>
+    <p style="margin:0;font-size:0.8125rem;">QuoteDrawer reads <code>localStorage</code> on init via nanostores persistent. If Astro tries to SSR it, <code>localStorage</code> doesn't exist in Node.js and the build fails. <code>client:only</code> skips SSR entirely.</p>
+  </div>
+</section>
+
+<!-- SLIDE 13: Styling -->
+<section class="slide" id="slide-styling" data-title="Styling">
+  <div class="label">Design System</div>
+  <h2>Tailwind CSS v4 + Brand Tokens</h2>
+  <div class="grid-2">
+    <div>
+      <div class="code-label">src/styles/global.css</div>
+      <pre><code><span class="kw">@import</span> <span class="str">"tailwindcss"</span>;
+
+<span class="kw">@theme</span> {
+  <span class="attr">--color-primary-500</span>: <span class="val">#3D4760</span>;
+  <span class="attr">--color-accent-500</span>: <span class="val">#47B2E4</span>;
+  <span class="attr">--font-sans</span>: <span class="val">'Lato', system-ui</span>;
+  <span class="attr">--font-heading</span>: <span class="val">'Saira Semi Condensed'</span>;
+  <span class="attr">--radius-lg</span>: <span class="val">0.75rem</span>;
+}
+
+<span class="kw">@utility</span> container-site {
+  max-width: <span class="num">1280px</span>;
+  margin-inline: auto;
+  padding-inline: <span class="num">1rem</span>;
+}
+
+<span class="kw">@utility</span> btn-primary {
+  background: <span class="fn">var</span>(<span class="attr">--color-primary-600</span>);
+  color: white;
+  <span class="punct">&amp;:hover</span> { background: <span class="fn">var</span>(<span class="attr">--color-primary-700</span>); }
+}</code></pre>
+    </div>
+    <div>
+      <h3>v4 vs v3 &mdash; Key Changes</h3>
+      <table>
+        <tr><td><code>tailwind.config.js</code></td><td>Gone. Use <code>@theme {}</code> in CSS</td></tr>
+        <tr><td><code>@tailwind base</code></td><td><code>@import "tailwindcss"</code></td></tr>
+        <tr><td><code>@layer utilities</code></td><td><code>@utility name {}</code></td></tr>
+        <tr><td>JS theme objects</td><td>CSS custom properties</td></tr>
+      </table>
+      <div class="info-box tip">
+        <div class="info-box-title">How @theme Works</div>
+        <p style="margin:0;font-size:0.8125rem;"><code>--color-primary-500: #3D4760</code> in <code>@theme</code> does two things: creates a CSS variable AND generates utilities like <code>bg-primary-500</code>, <code>text-primary-500</code>, <code>border-primary-500</code>.</p>
+      </div>
+      <div class="info-box warn">
+        <div class="info-box-title">Common Mistake</div>
+        <p style="margin:0;font-size:0.8125rem;">Don't copy Tailwind v3 examples from the internet. They use <code>tailwind.config.js</code> which does not exist in v4. All configuration is CSS-native now.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 14: State Management -->
+<section class="slide" id="slide-state" data-title="State Management">
+  <div class="label">Data Flow</div>
+  <h2>State Management with Nanostores</h2>
+  <p>Islands are isolated &mdash; they don't share a component tree. Nanostores provides cross-island reactive state.</p>
+  <div class="grid-2">
+    <div>
+      <div class="code-label">src/lib/stores/cart.ts</div>
+      <pre><code><span class="kw">import</span> { atom } <span class="kw">from</span> <span class="str">'nanostores'</span>;
+<span class="kw">import</span> { persistentMap } <span class="kw">from</span> <span class="str">'@nanostores/persistent'</span>;
+
+<span class="cmt">// Persists to localStorage automatically</span>
+<span class="kw">export const</span> quoteItems =
+  <span class="fn">persistentMap</span>(<span class="str">'krayden-quote:'</span>, {});
+
+<span class="kw">export const</span> quoteItemCount = <span class="fn">atom</span>(<span class="num">0</span>);
+
+<span class="kw">export function</span> <span class="fn">addToQuote</span>(item) { <span class="cmt">...</span> }
+<span class="kw">export function</span> <span class="fn">removeFromQuote</span>(sku) { <span class="cmt">...</span> }</code></pre>
+    </div>
+    <div>
+      <div class="code-label">src/lib/utils/nanostores.svelte.ts</div>
+      <pre><code><span class="cmt">// Custom bridge: nanostores → Svelte 5</span>
+<span class="kw">export function</span> <span class="fn">useStore</span>&lt;T&gt;(store) {
+  <span class="kw">let</span> current = <span class="fn">$state</span>(store.<span class="fn">get</span>());
+
+  <span class="fn">$effect</span>(() <span class="punct">=></span> {
+    <span class="kw">const</span> unsub = store.<span class="fn">subscribe</span>((val) <span class="punct">=></span> {
+      current = val;
+    });
+    <span class="kw">return</span> unsub;
+  });
+
+  <span class="kw">return</span> { <span class="kw">get</span> <span class="fn">value</span>() { <span class="kw">return</span> current; } };
+}</code></pre>
+      <div class="info-box warn">
+        <div class="info-box-title">No @nanostores/svelte</div>
+        <p style="margin:0;font-size:0.8125rem;">This package does not exist. We wrote <code>useStore()</code> ourselves. Call it at the top level of <code>&lt;script&gt;</code>, never inside functions or conditionals.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 15: B2B Quote Flow -->
+<section class="slide" id="slide-quote" data-title="B2B Quote Flow">
+  <div class="label">Business Logic</div>
+  <h2>The B2B Quote Flow</h2>
+  <p><strong>No prices. No checkout.</strong> Users browse products, build a quote list, and request a quote. Sales follows up.</p>
+  <div class="flow">
+    <div class="flow-step">Browse Catalog</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">Add to Quote</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">Review in Drawer</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step active">Submit Quote Request</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">Sales Follow-up</div>
+  </div>
+  <h3>How It Works Technically</h3>
+  <table>
+    <tr><td><strong>AddToQuote.svelte</strong></td><td>Captures SKU + quantity + notes, calls <code>addToQuote()</code></td></tr>
+    <tr><td><strong>cart.ts (nanostore)</strong></td><td><code>persistentMap</code> stores items in <code>localStorage</code> keyed by SKU</td></tr>
+    <tr><td><strong>QuoteDrawer.svelte</strong></td><td>Reads from nanostore, shows slide-out panel with item list</td></tr>
+    <tr><td><strong>QuoteRequestForm.svelte</strong></td><td>Reads items from store, validates with Zod, submits, clears cart</td></tr>
+  </table>
+  <div class="info-box tip">
+    <div class="info-box-title">Why This Works for SSG</div>
+    <p style="margin:0;font-size:0.8125rem;">B2B pricing is negotiated per customer, so there are no prices to display. This removes the hardest SSG problem entirely &mdash; every product page is truly static.</p>
+  </div>
+</section>
+
+<!-- SLIDE 16: Content Pipeline -->
+<section class="slide" id="slide-pipeline" data-title="Content Pipeline">
+  <div class="label">Data</div>
+  <h2>Content Pipeline &mdash; API to Markdown</h2>
+  <p>Product data flows from the Caplinq API through a sync script into Markdown files that Astro builds into HTML.</p>
+  <div class="flow">
+    <div class="flow-step">Caplinq .NET API</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">sync-catalog.ts</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">1,081 .md files</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">Zod validation</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step active">Static HTML</div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <h3>The Sync Script</h3>
+      <ul>
+        <li><code>npm run sync</code> &mdash; fetches from API via OAuth2</li>
+        <li>Transforms API DTOs to Markdown frontmatter</li>
+        <li>Converts HTML descriptions to Markdown</li>
+        <li>Generates CDN image URLs (Cloudflare)</li>
+        <li>Writes one <code>.md</code> file per product</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Categories</h3>
+      <ul>
+        <li>60+ YAML files with hierarchical <code>parentCategory</code></li>
+        <li><code>buildCategoryTree()</code> assembles the tree at build time</li>
+        <li><code>getCategoryBreadcrumbs()</code> traverses up for nav</li>
+        <li>Each category has an SVG icon from <code>category-icons.ts</code></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 17: Key Patterns & Gotchas -->
+<section class="slide" id="slide-gotchas" data-title="Patterns & Gotchas">
+  <div class="label">Watch Out</div>
+  <h2>Key Patterns &amp; Gotchas</h2>
+  <div class="grid-2">
+    <div>
+      <h3 style="margin-top:0;">Must Do</h3>
+      <ul>
+        <li><strong>Svelte 5 Runes only</strong> &mdash; <code>$state</code>, <code>$derived</code>, <code>$effect</code>, <code>$props()</code></li>
+        <li><strong>Always clean up <code>$effect</code></strong> &mdash; return a cleanup function for event listeners</li>
+        <li><strong>Serialize props</strong> &mdash; only JSON-safe data crosses the Astro→Svelte boundary</li>
+        <li><strong><code>getCollection()</code> in .astro only</strong> &mdash; never inside Svelte</li>
+        <li><strong>Use <code>render()</code> from <code>astro:content</code></strong> &mdash; not <code>entry.render()</code> (Astro 4 API, removed)</li>
+        <li><strong>Use <code>useStore()</code> at top level</strong> &mdash; never inside functions or conditionals</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="margin-top:0;">Never Do</h3>
+      <ul>
+        <li><strong><code>export let</code></strong> &mdash; Svelte 4 prop syntax, won't work</li>
+        <li><strong><code>$:</code> reactive labels</strong> &mdash; Svelte 4, use <code>$derived</code></li>
+        <li><strong><code>on:click</code></strong> &mdash; Svelte 4, use <code>onclick</code></li>
+        <li><strong><code>import { writable }</code></strong> &mdash; Svelte stores, use nanostores</li>
+        <li><strong><code>tailwind.config.js</code></strong> &mdash; doesn't exist in v4</li>
+        <li><strong><code>@tailwind base</code></strong> &mdash; v3 directive, use <code>@import "tailwindcss"</code></li>
+        <li><strong>Pass functions as island props</strong> &mdash; not serializable</li>
+        <li><strong>Access <code>window</code>/<code>localStorage</code> in frontmatter</strong> &mdash; runs in Node.js</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-box important">
+    <div class="info-box-title">The #1 Gotcha</div>
+    <p style="margin:0;font-size:0.8125rem;">Most Svelte tutorials online are for <strong>Svelte 4</strong>. The syntax looks similar but is fundamentally different. If a tutorial uses <code>export let</code> or <code>$:</code>, it's outdated. Always check for Svelte 5 / Runes-specific docs.</p>
+  </div>
+</section>
+
+<!-- SLIDE 18: Resources & Next Steps -->
+<section class="slide" id="slide-resources" data-title="Resources & Next Steps">
+  <div class="label">Getting Started</div>
+  <h2>Resources &amp; Next Steps</h2>
+  <div class="grid-2">
+    <div>
+      <h3 style="margin-top:0;">Official Docs</h3>
+      <ul>
+        <li><strong>Astro</strong> &mdash; docs.astro.build</li>
+        <li><strong>Svelte 5</strong> &mdash; svelte.dev/docs (make sure it says &ldquo;Runes&rdquo;)</li>
+        <li><strong>Tailwind v4</strong> &mdash; tailwindcss.com/docs</li>
+        <li><strong>Nanostores</strong> &mdash; github.com/nanostores/nanostores</li>
+        <li><strong>Zod</strong> &mdash; zod.dev</li>
+      </ul>
+      <h3>Project Docs</h3>
+      <ul>
+        <li><code>CLAUDE.md</code> &mdash; project rules &amp; conventions</li>
+        <li><code>docs/architecture-decisions.md</code> &mdash; 6 ADRs</li>
+        <li><code>docs/component-catalog.md</code> &mdash; all components</li>
+        <li><code>docs/routing-map.md</code> &mdash; URL structure</li>
+        <li><code>docs/legacy-codebase-analysis.md</code> &mdash; what we replaced</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="margin-top:0;">Dev Commands</h3>
+      <table>
+        <tr><td><code>npm run dev</code></td><td>Start dev server</td></tr>
+        <tr><td><code>npm run build</code></td><td>Build for production</td></tr>
+        <tr><td><code>npm run sync</code></td><td>Sync products from API</td></tr>
+        <tr><td><code>npm run sync:build</code></td><td>Sync + build</td></tr>
+      </table>
+      <h3>Key Files to Read First</h3>
+      <ol>
+        <li><code>src/layouts/PageLayout.astro</code> &mdash; see how islands are wired</li>
+        <li><code>src/pages/products/[category]/[slug].astro</code> &mdash; dynamic routing</li>
+        <li><code>src/components/cart/QuoteDrawer.svelte</code> &mdash; full Svelte 5 patterns</li>
+        <li><code>src/lib/stores/cart.ts</code> &mdash; nanostores in action</li>
+        <li><code>src/styles/global.css</code> &mdash; Tailwind v4 config</li>
+      </ol>
+    </div>
+  </div>
+  <div class="info-box" style="text-align: center; margin-top: 1.5rem;">
+    <p style="margin:0; font-size:1rem; font-weight:600; color: var(--primary-600);">Questions? Open the codebase, run <code>npm run dev</code>, and start exploring.</p>
+  </div>
+</section>
+
+</div><!-- /slides-container -->
+
+<!-- ==================== JAVASCRIPT ==================== -->
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let currentSlide = 0;
+  let mode = 'presentation';
+
+  const progressBar = document.getElementById('progress-bar');
+  const slideCounter = document.getElementById('slide-counter');
+  const sidebarNav = document.getElementById('sidebar-nav');
+
+  // Build sidebar nav
+  slides.forEach((slide, i) => {
+    const title = slide.getAttribute('data-title') || `Slide ${i + 1}`;
+    const a = document.createElement('a');
+    a.href = '#' + slide.id;
+    a.textContent = title;
+    a.dataset.index = i;
+    a.addEventListener('click', (e) => {
+      if (mode === 'presentation') {
+        e.preventDefault();
+        goToSlide(i);
+      }
+    });
+    sidebarNav.appendChild(a);
+  });
+
+  function updatePresentation() {
+    slides.forEach((s, i) => s.classList.toggle('active', i === currentSlide));
+    progressBar.style.width = ((currentSlide + 1) / totalSlides * 100) + '%';
+    slideCounter.textContent = (currentSlide + 1) + ' / ' + totalSlides;
+
+    // Update sidebar active state
+    sidebarNav.querySelectorAll('a').forEach((a, i) => {
+      a.classList.toggle('active', i === currentSlide);
+    });
+  }
+
+  function goToSlide(index) {
+    currentSlide = Math.max(0, Math.min(totalSlides - 1, index));
+    updatePresentation();
+  }
+
+  function nextSlide() { goToSlide(currentSlide + 1); }
+  function prevSlide() { goToSlide(currentSlide - 1); }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (mode === 'presentation') {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        prevSlide();
+      }
+    }
+    if (e.key === 'Escape') {
+      setMode(mode === 'presentation' ? 'reference' : 'presentation');
+    }
+  });
+
+  // Reference mode scroll tracking
+  let scrollTimeout;
+  window.addEventListener('scroll', () => {
+    if (mode !== 'reference') return;
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      let closest = 0;
+      let closestDist = Infinity;
+      slides.forEach((slide, i) => {
+        const rect = slide.getBoundingClientRect();
+        const dist = Math.abs(rect.top - 100);
+        if (dist < closestDist) {
+          closestDist = dist;
+          closest = i;
+        }
+      });
+      sidebarNav.querySelectorAll('a').forEach((a, i) => {
+        a.classList.toggle('active', i === closest);
+      });
+    }, 50);
+  });
+
+  // Mode toggle
+  window.setMode = function(newMode) {
+    mode = newMode;
+    document.body.className = newMode + '-mode';
+    document.getElementById('btn-present').classList.toggle('active', newMode === 'presentation');
+    document.getElementById('btn-reference').classList.toggle('active', newMode === 'reference');
+
+    if (newMode === 'presentation') {
+      updatePresentation();
+    }
+  };
+
+  // Initialize
+  updatePresentation();
+})();
+</script>
+</body>
+</html>
