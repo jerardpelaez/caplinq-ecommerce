@@ -4,6 +4,7 @@ import { glob } from 'astro/loaders';
 const products = defineCollection({
   loader: glob({ pattern: '**/*.{md,yaml}', base: './src/content/products' }),
   schema: z.object({
+    apiId: z.number().optional(),
     name: z.string(),
     slug: z.string(),
     sku: z.string(),
@@ -13,6 +14,7 @@ const products = defineCollection({
     subcategory: z.string().optional(),
     applications: z.array(z.string()).default([]),
     industries: z.array(z.string()).default([]),
+    sellingPoints: z.array(z.string()).default([]),
     shortDescription: z.string(),
     specifications: z.record(z.string()).default({}),
     specificationGroups: z.array(z.object({
@@ -39,6 +41,7 @@ const products = defineCollection({
 const categories = defineCollection({
   loader: glob({ pattern: '**/*.yaml', base: './src/content/categories' }),
   schema: z.object({
+    apiId: z.number().optional(),
     name: z.string(),
     slug: z.string(),
     parentCategory: z.string().optional(),
