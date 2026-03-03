@@ -1,6 +1,9 @@
 import dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
 
+// Allow self-signed certificates for internal API during sync
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 import * as fs from 'fs';
 import * as path from 'path';
 import * as yaml from 'js-yaml';
